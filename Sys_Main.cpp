@@ -1,5 +1,6 @@
 #include <Windows.h>
 #include <DxLib.h>
+#include "Common.h"
 #include "Sys_Main.h"
 #include "Sys_Input.h"
 #include "SceneMgr.h"

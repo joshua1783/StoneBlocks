@@ -1,9 +1,8 @@
 #ifndef SYS_INPUT_H
 #define SYS_INPUT_H
 
-namespace {
-	const int BUFSIZE = 256;	//キーバッファサイズ
-}
+#define BUFSIZE 256	//キーバッファサイズ
+
 
 //入力関係を管理するクラス
 class CInput

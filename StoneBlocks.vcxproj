@@ -130,6 +130,7 @@
     <ClCompile Include="Sys_Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Common.h" />
     <ClInclude Include="Game_Main.h" />
     <ClInclude Include="SceneBase.h" />
     <ClInclude Include="SceneMgr.h" />

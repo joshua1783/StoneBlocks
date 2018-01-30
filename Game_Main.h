@@ -13,6 +13,7 @@ public:
 	void Draw(CSceneMgr* sceneMgr);
 private:
 	CDataLoader * data;
+	void DrawBackgraound();
 };
 
 #endif // !GAME_MAIN_H
