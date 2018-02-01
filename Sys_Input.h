@@ -8,13 +8,14 @@
 class CInput
 {
 public:
-	CInput() {};
+	CInput();
 	~CInput() {};
 	static CInput* GetInstance();
 	int GetKeyAll();
-	bool CheckKey(int keyCode) const;
+	int CheckKey(int keyCode) const;
 private:
 	char keyState[BUFSIZE];	//キー状態保存配列
+	int  keyFrame[BUFSIZE];	//キーの押されたフレーム数保存配列
 };
 
 #endif

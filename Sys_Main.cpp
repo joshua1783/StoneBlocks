@@ -48,7 +48,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	while (ProcessMessage() == 0 &&
 		   ClearDrawScreen() == 0 &&
 		   input->GetKeyAll() == 0 &&
-		   input->CheckKey(KEY_INPUT_ESCAPE) == false){
+		   input->CheckKey(KEY_INPUT_ESCAPE) == 0){
 
 		scene->SceneUpdata();
 

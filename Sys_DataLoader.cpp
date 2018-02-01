@@ -26,7 +26,10 @@ void CDataLoader::Load() {
 	try {
 		//‰æ‘œ
 		ImgLoad(img_Background_Game, "img/Background_Game.png");
-		ImgLoad(img_BlockRed, "img/Block_red.png");
+		ImgLoad(img_BlockRed, "img/Block_Red.png");
+		ImgLoad(img_BlockBlue, "img/Block_Blue.png");
+		ImgLoad(img_BlockGreen, "img/Block_Green.png");
+		ImgLoad(img_BlockYellow, "img/Block_Yellow.png");
 	}
 	catch (const char* msg) {
 		printfDx("Load Error -> %s", msg);
@@ -38,10 +41,19 @@ void CDataLoader::Load() {
 int CDataLoader::GetImg_Background_Game() const {
 	return img_Background_Game;
 }
-
 int CDataLoader::GetImg_BlockRed() const {
 	return img_BlockRed;
 }
+int CDataLoader::GetImg_BlockBlue() const {
+	return img_BlockBlue;
+}
+int CDataLoader::GetImg_BlockGreen() const {
+	return img_BlockGreen;
+}
+int CDataLoader::GetImg_BlockYellow() const {
+	return img_BlockYellow;
+}
+
 
 //‘fŞ‚Ì“Ç‚İ‚İó‹µ‚ğ“•\¦‚·‚éŠÖ”
 void CDataLoader::LoadParcent() {

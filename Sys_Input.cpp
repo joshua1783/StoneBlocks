@@ -1,8 +1,16 @@
 #include <DxLib.h>
 #include "Sys_Input.h"
 
-//Cinputのインスタンスのポインタを返す関数
-CInput* CInput::GetInstance() {
+//CInputのコンストラクタ
+CInput::CInput(){
+
+	for (int i = 0; i < BUFSIZE; i++){
+		keyFrame[i] = 0;
+	}
+}
+
+//CInputのインスタンスのポインタを返す関数
+CInput* CInput::GetInstance(){
 
 	//インスタンス生成
 	static CInput instance;
@@ -13,14 +21,25 @@ CInput* CInput::GetInstance() {
 //全てのキー状態を取得する関数
 int CInput::GetKeyAll() {
 
-	return GetHitKeyStateAll(keyState);
+	if (GetHitKeyStateAll(keyState) != 0)
+		return -1;
+	//キーが押されているならば押されている間のフレーム数を加算
+	for (int i = 0; i < BUFSIZE; i++) {
+		if (keyState[i] != 0) {
+			keyFrame[i]++;
+		}else {
+			keyFrame[i] = 0;
+		}
+	}
+
+	return 0;
 }
 
 //引数のキーの状態を返す関数
-bool CInput::CheckKey(int keyCode) const {
+int CInput::CheckKey(int keyCode) const {
 
 	if (keyState[keyCode] != 0)
-		return true;
+		return keyFrame[keyCode];
 
-	return false;
+	return 0;
 }
