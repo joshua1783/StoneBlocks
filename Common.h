@@ -12,4 +12,17 @@
 #define FONTSIZE_M 40		//フォントサイズ中
 #define FONTSIZE_L 60		//フォントサイズ大
 
+#define MARGIN_WIDTH  40	//余白の幅
+#define MARGIN_HEIGHT 40	//余白の高さ
+#define BLOCK_SIZE 48		//ブロックのサイズ
+
+enum BlockType {
+	BlockType_Red,
+	BlockType_Blue,
+	BlockType_Green,
+	BlockType_Yellow,
+
+	BlockType_Num
+};
+
 #endif // !COMMON_H
