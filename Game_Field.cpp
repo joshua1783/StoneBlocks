@@ -8,9 +8,10 @@ CField::CField(): flag_Grid(false), data(0){
 
 	data = CDataLoader::GetInstance();
 
+	fieldBlocks.reserve(VECTOR_CAPACITY_NUM);
 	fieldBlocks = vector<vector<short>>(FIELD_HEIGHT - FIRST_LINE_NUM, vector<short>(FIELD_WIDTH, -1));
 	for (int i = 0; i < FIRST_LINE_NUM; i++) {
-		fieldBlocks.push_back(makeNewLine());
+		fieldBlocks.emplace_back(makeNewLine());
 	}
 }
 
