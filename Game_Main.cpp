@@ -3,16 +3,18 @@
 #include "SceneBase.h"
 #include "Game_Main.h"
 #include "Game_Field.h"
+#include "Gama_ActiveBlock.h"
 #include "Sys_Input.h"
 #include "Sys_DataLoader.h"
 
 //CGameのコンストラクタ
-CGame::CGame(): input(0), field(0), data(0){
+CGame::CGame(): input(0), field(0), block(0), data(0){
 
 	//インスタンス取得
 	input = CInput::GetInstance();
 	field = CField::GetInstance();
-	data = CDataLoader::GetInstance();
+	block = CActiveBlock::GetInstance();
+	data  = CDataLoader::GetInstance();
 
 	//素材読み込み
 	data->Load();
@@ -28,11 +30,9 @@ CSceneBase* CGame::Updata(CSceneMgr* sceneMgr) {
 
 	//次のシーンを現在のシーン(ゲームシーン)に設定
 	CSceneBase* next = this;
-
-	//Tabキーが押されたらグリッド線表示のフラグ反転
-	if (input->CheckKey(KEY_INPUT_TAB) == 1)
-		field->flag_Grid = !field->flag_Grid;
-
+	field->UpData();
+	block->UpDate();
+	
 	return next;
 }
 
@@ -41,5 +41,6 @@ void CGame::Draw(CSceneMgr* sceneMgr) {
 
 	DrawGraph(0, 0, data->GetImg_Background_Game(), FALSE);
 	field->Draw();
+	block->Draw();
 }
 

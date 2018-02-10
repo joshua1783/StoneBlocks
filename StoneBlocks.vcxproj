@@ -123,6 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Gama_ActiveBlock.cpp" />
     <ClCompile Include="Game_Field.cpp" />
     <ClCompile Include="Game_Main.cpp" />
     <ClCompile Include="SceneMgr.cpp" />
@@ -132,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h" />
+    <ClInclude Include="Gama_ActiveBlock.h" />
     <ClInclude Include="Game_Field.h" />
     <ClInclude Include="Game_Main.h" />
     <ClInclude Include="SceneBase.h" />

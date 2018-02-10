@@ -3,28 +3,30 @@
 
 #include <vector>
 
-#define FIELD_WIDTH 9	//フィールドの幅
-#define FIELD_HEIGHT 14	//フィールドの高さ
-#define FIRST_LINE_NUM 1	//ゲーム開始時のブロックライン数
 #define VECTOR_CAPACITY_NUM	10000 //あらかじめ確保しておく可変長配列の要素数
 
 using namespace std;
 
+class CInput;
 class CDataLoader;
 
 class CField
 {
 public:
-	bool flag_Grid;	//グリッド線の描画フラグ
 	CField();
 	~CField();
 	static CField* GetInstance();
+	void UpData();
 	void Draw();
+	int GetFieldBlockType(int, int);
+	void Active2FieldBlock(int, int, short);
 private:
+	CInput * input;
 	CDataLoader * data;
+	bool flag_Grid;	//グリッド線の描画フラグ
+	vector<short> newLineBlocks;
 	vector<vector<short>> fieldBlocks;
-	vector<short> makeNewLine();
-
+	void MakeNewLine();
 };
 
-#endif GAME_FIELD_H
+#endif // !GAME_FIELD_H

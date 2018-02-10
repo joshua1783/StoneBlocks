@@ -14,6 +14,8 @@
 
 #define MARGIN_WIDTH  40	//余白の幅
 #define MARGIN_HEIGHT 40	//余白の高さ
+#define FIELD_WIDTH 9	//フィールドの幅
+#define FIELD_HEIGHT 14	//フィールドの高さ
 #define BLOCK_SIZE 48		//ブロックのサイズ
 
 enum BlockType {

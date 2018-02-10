@@ -3,6 +3,7 @@
 
 class CInput;
 class CField;
+class CActiveBlock;
 class CDataLoader;
 
 //ゲームシーン全体を管理するクラス
@@ -16,6 +17,7 @@ public:
 private:
 	CInput * input;
 	CField* field;
+	CActiveBlock* block;
 	CDataLoader * data;
 };
 
