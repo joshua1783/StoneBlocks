@@ -8,13 +8,15 @@
 #include "Sys_DataLoader.h"
 
 //CGameのコンストラクタ
-CGame::CGame(): input(0), field(0), block(0), data(0){
+CGame::CGame(): input(0), field(0), block(0), data(0), timeNow(0), timeOld(GetNowCount()){
 
 	//インスタンス取得
 	input = CInput::GetInstance();
 	field = CField::GetInstance();
 	block = CActiveBlock::GetInstance();
 	data  = CDataLoader::GetInstance();
+
+	status = GS_ActiveBlockMove;
 
 	//素材読み込み
 	data->Load();
@@ -30,8 +32,15 @@ CSceneBase* CGame::Updata(CSceneMgr* sceneMgr) {
 
 	//次のシーンを現在のシーン(ゲームシーン)に設定
 	CSceneBase* next = this;
-	field->UpData();
-	block->UpDate();
+	
+	//現在時間を取得し,1フレームでの遷移時間を取得
+	int time = GetNowCount();
+	timeNow = time - timeOld;
+	timeOld = time;
+
+	//各クラスの状態推移関数
+	status = block->UpDate(status, timeNow);
+	status = field->UpData(status, timeNow);
 	
 	return next;
 }
@@ -40,7 +49,14 @@ CSceneBase* CGame::Updata(CSceneMgr* sceneMgr) {
 void CGame::Draw(CSceneMgr* sceneMgr) {
 
 	DrawGraph(0, 0, data->GetImg_Background_Game(), FALSE);
+	//各クラスの描画関数
 	field->Draw();
 	block->Draw();
+}
+
+//1フレームの遷移時間を返す関数
+int CGame::GetTimeNow() {
+
+	return timeNow;
 }
 

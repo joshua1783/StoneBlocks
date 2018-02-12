@@ -14,11 +14,15 @@ public:
 	~CGame();
 	CSceneBase* Updata(CSceneMgr* sceneMgr);
 	void Draw(CSceneMgr* sceneMgr);
+	int GetTimeNow();
 private:
 	CInput * input;
 	CField* field;
 	CActiveBlock* block;
 	CDataLoader * data;
+	int status;
+	int timeNow;
+	int timeOld;
 };
 
 #endif // !GAME_MAIN_H

@@ -3,8 +3,8 @@
 
 #define ACTIVEBLOCK_WIDTH  1
 #define ACTIVEBLOCK_HEIGHT 2
-#define DOWN_TIME_NUM 60
-#define WAIT_TIME_NUM 60
+#define DOWN_TIME_NUM 1500	//アクティブブロックの自由落下までの猶予時間(ｍS)
+#define WAIT_TIME_NUM 1500	//アクティブブロックが固定されるまでの猶予時間(mS)
 
 using namespace std;
 
@@ -23,7 +23,7 @@ public:
 	CActiveBlock();
 	~CActiveBlock();
 	static CActiveBlock* GetInstance();
-	void UpDate();
+	int UpDate(int, int);
 	void Draw();
 private:
 	CInput * input;
@@ -34,10 +34,11 @@ private:
 	int downTime;
 	int waitTime;
 	bool flag_BlockStop;
-	void MoveBlock();
+	void MoveBlock(int);
 	void ChangeBlock();
 	void MakeNewBlock();
-	Pos CheckHitBlock(Pos);
+	bool CheckHitBlock_X(int);
+	bool CheckHitBlock_Y();
 };
 
 #endif // !GAME_ACTIVE_BLOCK_H
