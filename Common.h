@@ -31,7 +31,7 @@ enum GameStatus {
 	GS_ActiveBlockMove,
 	GS_FieldLineUp,
 	GS_CheckFieldBlock,
-	GS_FieldBlockLineUp,
+	GS_DropBlocks,
 };
 
 #endif // !COMMON_H

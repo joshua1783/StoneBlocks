@@ -34,11 +34,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		ChangeWindowMode(TRUE) != DX_CHANGESCREEN_OK ||
 		SetDrawScreen(DX_SCREEN_BACK) == -1)
 		return -1;
-
+	
 	//ウィンドウ作成
 	SetMainWindowText("StoneBlocks");
 	SetGraphMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32);
-
+	
 	//インスタンス取得
 	CSystem* system = CSystem::GetInstance();
 	CInput* input = CInput::GetInstance();
@@ -58,7 +58,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		ScreenFlip();
 
 	}
-
+	
 	//Dxライブラリ終了処理
 	DxLib_End();
 

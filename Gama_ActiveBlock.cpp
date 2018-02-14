@@ -33,47 +33,46 @@ CActiveBlock* CActiveBlock::GetInstance() {
 }
 
 //アクティブブロック関係の状態推移関数
-int CActiveBlock::UpDate(int status, int timeNow) {
+void CActiveBlock::UpDate(int* status, int timeNow) {
 
-	if (status == GS_ActiveBlockMove) {
+	if (*status == GS_ActiveBlockMove) {
 		MoveBlock(timeNow);
 		//ブロックが落下不可の場合,アクティブブロックをフィールドブロックの対応位置に変換
 		if (waitTime >= WAIT_TIME_NUM) {
-			for (int i = 0; i < ACTIVEBLOCK_WIDTH; i++) {
-				for (int j = 0; j < ACTIVEBLOCK_HEIGHT; j++) {
-					field->Active2FieldBlock(pos.x, pos.y + j, activeBlock[j][i]);
+			for (int i = 0; i < ACTIVEBLOCK_HEIGHT; i++) {
+				for (int j = 0; j < ACTIVEBLOCK_WIDTH; j++) {
+					field->Active2FieldBlock(pos.x, pos.y + i, activeBlock[i][j]);
 				}
 			}
 			MakeNewBlock();
 			waitTime = 0;
 			flag_BlockStop = false;
-			status = GS_FieldLineUp;
+			*status = GS_FieldLineUp;
 		}
 
 	}
 
-	return status;
 }
 
 //アクティブブロック関係の描画関数
 void CActiveBlock::Draw() {
 
 	//activeBlockの各要素に対応した色のブロック描画
-	for (int i = 0; i < ACTIVEBLOCK_WIDTH; i++) {
-		for (int j = 0; j < ACTIVEBLOCK_HEIGHT; j++) {
+	for (int i = 0; i < ACTIVEBLOCK_HEIGHT; i++) {
+		for (int j = 0; j < ACTIVEBLOCK_WIDTH; j++) {
 			//アクティブブロックの描画
-			switch (activeBlock[j][i]) {
+			switch (activeBlock[i][j]) {
 				case BlockType_Red:
-					DrawGraph(BLOCK_SIZE * (i + pos.x) + MARGIN_WIDTH, BLOCK_SIZE * (j + pos.y) + MARGIN_HEIGHT, data->GetImg_BlockRed(), TRUE);
+					DrawGraph(BLOCK_SIZE * (j + pos.x) + MARGIN_WIDTH, BLOCK_SIZE * (i + pos.y) + MARGIN_HEIGHT, data->GetImg_BlockRed(), TRUE);
 					break;
 				case BlockType_Blue:
-					DrawGraph(BLOCK_SIZE * (i + pos.x) + MARGIN_WIDTH, BLOCK_SIZE * (j + pos.y) + MARGIN_HEIGHT, data->GetImg_BlockBlue(), TRUE);
+					DrawGraph(BLOCK_SIZE * (j + pos.x) + MARGIN_WIDTH, BLOCK_SIZE * (i + pos.y) + MARGIN_HEIGHT, data->GetImg_BlockBlue(), TRUE);
 					break;
 				case BlockType_Green:
-					DrawGraph(BLOCK_SIZE * (i + pos.x) + MARGIN_WIDTH, BLOCK_SIZE * (j + pos.y) + MARGIN_HEIGHT, data->GetImg_BlockGreen(), TRUE);
+					DrawGraph(BLOCK_SIZE * (j + pos.x) + MARGIN_WIDTH, BLOCK_SIZE * (i + pos.y) + MARGIN_HEIGHT, data->GetImg_BlockGreen(), TRUE);
 					break;
 				case BlockType_Yellow:
-					DrawGraph(BLOCK_SIZE * (i + pos.x) + MARGIN_WIDTH, BLOCK_SIZE * (j + pos.y) + MARGIN_HEIGHT, data->GetImg_BlockYellow(), TRUE);
+					DrawGraph(BLOCK_SIZE * (j + pos.x) + MARGIN_WIDTH, BLOCK_SIZE * (i + pos.y) + MARGIN_HEIGHT, data->GetImg_BlockYellow(), TRUE);
 					break;
 				default:
 					break;
@@ -132,10 +131,10 @@ void CActiveBlock::MakeNewBlock() {
 	pos.x = FIELD_WIDTH / 2;
 	pos.y = 0;
 
-	for (int i = 0; i < ACTIVEBLOCK_WIDTH; i++){
-		for (int j = 0; j < ACTIVEBLOCK_HEIGHT; j++){
+	for (int i = 0; i < ACTIVEBLOCK_HEIGHT; i++){
+		for (int j = 0; j < ACTIVEBLOCK_WIDTH; j++){
 
-			activeBlock[j][i] = GetRand(BlockType_Num - 1);
+			activeBlock[i][j] = GetRand(BlockType_Num - 1);
 		}
 	}
 }

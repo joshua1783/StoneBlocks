@@ -23,7 +23,7 @@ public:
 	CActiveBlock();
 	~CActiveBlock();
 	static CActiveBlock* GetInstance();
-	int UpDate(int, int);
+	void UpDate(int*, int);
 	void Draw();
 private:
 	CInput * input;

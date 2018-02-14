@@ -39,8 +39,8 @@ CSceneBase* CGame::Updata(CSceneMgr* sceneMgr) {
 	timeOld = time;
 
 	//ŠeƒNƒ‰ƒX‚Ìó‘Ô„ˆÚŠÖ”
-	status = block->UpDate(status, timeNow);
-	status = field->UpData(status, timeNow);
+	block->UpDate(&status, timeNow);
+	field->UpData(&status, timeNow);
 	
 	return next;
 }
