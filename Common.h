@@ -29,7 +29,6 @@ enum BlockType {
 
 enum GameStatus {
 	GS_ActiveBlockMove,
-	GS_FieldLineUp,
 	GS_CheckFieldBlock,
 	GS_DropBlocks,
 };

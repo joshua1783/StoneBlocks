@@ -47,7 +47,7 @@ void CActiveBlock::UpDate(int* status, int timeNow) {
 			MakeNewBlock();
 			waitTime = 0;
 			flag_BlockStop = false;
-			*status = GS_FieldLineUp;
+			*status = GS_CheckFieldBlock;
 		}
 
 	}

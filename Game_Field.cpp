@@ -39,16 +39,11 @@ void CField::UpData(int* status,int timeNow) {
 	if (input->CheckKey(KEY_INPUT_TAB) == 1)
 		flag_Grid = !flag_Grid;
 
-	//ゲーム状態がフィールドブロックのライン上昇且つ猶予時間に達しているならばラインを上昇
-	//そうでなければ次のゲーム状態に移行
-	if (*status == GS_FieldLineUp && lineUpTime >= LINEUP_TIME_NUM) {
-		LineUp();
-		lineUpTime = 0;
-	}else {
-		*status = GS_CheckFieldBlock;
-	}
-
 	if (*status == GS_CheckFieldBlock)
+		if (lineUpTime >= LINEUP_TIME_NUM) {
+			LineUp();
+			lineUpTime = 0;
+		}
 		*status = CheckFieldBlocks();
 	if (*status == GS_DropBlocks)
 		*status = GS_ActiveBlockMove;
@@ -117,9 +112,9 @@ int CField::GetFieldBlockType(int x, int y) {
 }
 
 //落下したアクティブブロックをフィールドブロックに変更する関数
-void CField::Active2FieldBlock(int i, int j, short blockType) {
+void CField::Active2FieldBlock(int x, int y, short blockType) {
 
-	fieldBlocks[j + topDrowLineNow][i] = blockType;
+	fieldBlocks[y + topDrowLineNow][x] = blockType;
 }
 
 //次に出現するラインのブロックを作成する関数
@@ -156,16 +151,16 @@ int CField::CheckFieldBlocks() {
 			bufferBlocks[i][j] = 0;
 		}
 	}
-
+	//同色のブロックがつながっているかを探索
 	for (int i = 0; i < FIELD_HEIGHT; i++){
 		for (int j = 0; j < FIELD_WIDTH; j++) {
-
+			//空白ならば次へ
 			if (GetFieldBlockType(j, i) == -1)	continue;
 			CountSameBlock(j, i);
 
 		}
 	}
-
+	//消去フラグが立っているブロックがあれば該当ブロックを消去
 	for (int i = 0; i < FIELD_HEIGHT; i++){
 		for (int j = 0; j < FIELD_WIDTH; j++){
 			if (bufferBlocks[i][j] == 1){
@@ -174,7 +169,7 @@ int CField::CheckFieldBlocks() {
 			}
 		}
 	}
-	
+	//一つでも消えるブロックがあったならGS_FallBlocksに移動
 	if (flag_Vanish == true) {
 		return GS_DropBlocks;
 	}else {
@@ -185,16 +180,18 @@ int CField::CheckFieldBlocks() {
 //同じ色のブロックを数える関数
 void CField::CountSameBlock(int x, int y) {
 
+	//探索元の色を保存
 	int color = GetFieldBlockType(x, y);
+	
+	//左から右にかけて同色ブロックを探索,指定数以上なら該当ブロックに消去フラグを立てる
 	int count = 0;
-
 	for (int i = 0; x + i < FIELD_WIDTH && color == GetFieldBlockType(x + i, y); i++, count++){}
 	if (count >= VANISH_MIN_MUN) {
 		for (int j = 0; j < count; j++) {
 			bufferBlocks[y][x + j] = 1;
 		}
 	}
-
+	//上から下にかけて同色ブロックを探索,指定数以上なら該当ブロックに消去フラグを立てる
 	count = 0;
 	for (int i = 0; y + i < FIELD_HEIGHT && color == GetFieldBlockType(x, y + i); i++, count++) {}
 	if (count >= VANISH_MIN_MUN) {
@@ -202,7 +199,7 @@ void CField::CountSameBlock(int x, int y) {
 			bufferBlocks[y + j][x] = 1;
 		}
 	}
-	
+	//左上から右下にかけて同色ブロックを探索,指定数以上なら該当ブロックに消去フラグを立てる
 	count = 0;
 	for (int i = 0; x + i < FIELD_WIDTH && y + i < FIELD_HEIGHT && color == GetFieldBlockType(x + i, y + i); i++, count++) {}
 	if (count >= VANISH_MIN_MUN) {
@@ -210,7 +207,7 @@ void CField::CountSameBlock(int x, int y) {
 			bufferBlocks[y + j][x + j] = 1;
 		}
 	}
-	
+	//右上から左下にかけて同色ブロックを探索,指定数以上なら該当ブロックに消去フラグを立てる
 	count = 0;
 	for (int i = 0; x - i >= 0 && y + i < FIELD_HEIGHT && color == GetFieldBlockType(x - i, y + i); i++, count++) {}
 	if (count >= VANISH_MIN_MUN) {
