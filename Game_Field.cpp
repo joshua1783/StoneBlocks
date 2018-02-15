@@ -32,21 +32,22 @@ CField* CField::GetInstance() {
 
 //フィールド関係の状態推移関数
 void CField::UpData(int* status,int timeNow) {
-
-	lineUpTime += timeNow;
-	
+		
 	//Tabキーが押されたらグリッド線表示のフラグ反転
 	if (input->CheckKey(KEY_INPUT_TAB) == 1)
 		flag_Grid = !flag_Grid;
 
-	if (*status == GS_CheckFieldBlock)
+	if (*status == GS_ActiveBlockMove) {
+		lineUpTime += timeNow;
+	}else if (*status == GS_CheckFieldBlock) {
 		if (lineUpTime >= LINEUP_TIME_NUM) {
 			LineUp();
 			lineUpTime = 0;
 		}
 		*status = CheckFieldBlocks();
-	if (*status == GS_DropBlocks)
-		*status = GS_ActiveBlockMove;
+	}else if (*status == GS_DropBlocks) {
+		*status = GS_NewActiveBlock;
+	}
 }
 
 //フィールド関係の描画関数
@@ -173,7 +174,7 @@ int CField::CheckFieldBlocks() {
 	if (flag_Vanish == true) {
 		return GS_DropBlocks;
 	}else {
-		return GS_ActiveBlockMove;
+		return GS_NewActiveBlock;
 	}
 }
 
@@ -184,34 +185,34 @@ void CField::CountSameBlock(int x, int y) {
 	int color = GetFieldBlockType(x, y);
 	
 	//左から右にかけて同色ブロックを探索,指定数以上なら該当ブロックに消去フラグを立てる
-	int count = 0;
-	for (int i = 0; x + i < FIELD_WIDTH && color == GetFieldBlockType(x + i, y); i++, count++){}
-	if (count >= VANISH_MIN_MUN) {
-		for (int j = 0; j < count; j++) {
+	int num = 0;
+	for (int i = 0; x + i < FIELD_WIDTH && color == GetFieldBlockType(x + i, y); i++, num++){}
+	if (num >= VANISH_MIN_MUN) {
+		for (int j = 0; j < num; j++) {
 			bufferBlocks[y][x + j] = 1;
 		}
 	}
 	//上から下にかけて同色ブロックを探索,指定数以上なら該当ブロックに消去フラグを立てる
-	count = 0;
-	for (int i = 0; y + i < FIELD_HEIGHT && color == GetFieldBlockType(x, y + i); i++, count++) {}
-	if (count >= VANISH_MIN_MUN) {
-		for (int j = 0; j < count; j++) {
+	num = 0;
+	for (int i = 0; y + i < FIELD_HEIGHT && color == GetFieldBlockType(x, y + i); i++, num++) {}
+	if (num >= VANISH_MIN_MUN) {
+		for (int j = 0; j < num; j++) {
 			bufferBlocks[y + j][x] = 1;
 		}
 	}
 	//左上から右下にかけて同色ブロックを探索,指定数以上なら該当ブロックに消去フラグを立てる
-	count = 0;
-	for (int i = 0; x + i < FIELD_WIDTH && y + i < FIELD_HEIGHT && color == GetFieldBlockType(x + i, y + i); i++, count++) {}
-	if (count >= VANISH_MIN_MUN) {
-		for (int j = 0; j < count; j++) {
+	num = 0;
+	for (int i = 0; x + i < FIELD_WIDTH && y + i < FIELD_HEIGHT && color == GetFieldBlockType(x + i, y + i); i++, num++) {}
+	if (num >= VANISH_MIN_MUN) {
+		for (int j = 0; j < num; j++) {
 			bufferBlocks[y + j][x + j] = 1;
 		}
 	}
 	//右上から左下にかけて同色ブロックを探索,指定数以上なら該当ブロックに消去フラグを立てる
-	count = 0;
-	for (int i = 0; x - i >= 0 && y + i < FIELD_HEIGHT && color == GetFieldBlockType(x - i, y + i); i++, count++) {}
-	if (count >= VANISH_MIN_MUN) {
-		for (int j = 0; j < count; j++) {
+	num = 0;
+	for (int i = 0; x - i >= 0 && y + i < FIELD_HEIGHT && color == GetFieldBlockType(x - i, y + i); i++, num++) {}
+	if (num >= VANISH_MIN_MUN) {
+		for (int j = 0; j < num; j++) {
 			bufferBlocks[y + j][x - j] = 1;
 		}
 	}

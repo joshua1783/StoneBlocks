@@ -34,19 +34,21 @@ CActiveBlock* CActiveBlock::GetInstance() {
 
 //アクティブブロック関係の状態推移関数
 void CActiveBlock::UpDate(int* status, int timeNow) {
-
-	if (*status == GS_ActiveBlockMove) {
+	if (*status == GS_NewActiveBlock) {
+		MakeNewBlock();
+		waitTime = 0;
+		flag_BlockStop = false;
+		*status = GS_ActiveBlockMove;
+	}else if (*status == GS_ActiveBlockMove) {
 		MoveBlock(timeNow);
 		//ブロックが落下不可の場合,アクティブブロックをフィールドブロックの対応位置に変換
 		if (waitTime >= WAIT_TIME_NUM) {
 			for (int i = 0; i < ACTIVEBLOCK_HEIGHT; i++) {
 				for (int j = 0; j < ACTIVEBLOCK_WIDTH; j++) {
 					field->Active2FieldBlock(pos.x, pos.y + i, activeBlock[i][j]);
+					activeBlock[i][j] = -1;
 				}
 			}
-			MakeNewBlock();
-			waitTime = 0;
-			flag_BlockStop = false;
 			*status = GS_CheckFieldBlock;
 		}
 

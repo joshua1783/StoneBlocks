@@ -1,11 +1,11 @@
 #ifndef GAME_ACTIVE_BLOCK_H
 #define GAME_ACTIVE_BLOCK_H
 
-#define ACTIVEBLOCK_WIDTH  1
-#define ACTIVEBLOCK_HEIGHT 2
-#define DOWN_TIME_NUM 1500	//アクティブブロックの自由落下までの猶予時間(ｍS)
-#define WAIT_TIME_NUM 1500	//アクティブブロックが固定されるまでの猶予時間(mS)
-
+#define ACTIVEBLOCK_WIDTH  1	//アクティブブロックの幅
+#define ACTIVEBLOCK_HEIGHT 2	//アクティブブロックの高さ
+#define DOWN_TIME_NUM 1500		//アクティブブロックの自由落下までの猶予時間(ｍS)
+#define WAIT_TIME_NUM 1500		//アクティブブロックが固定されるまでの猶予時間(mS)
+	
 using namespace std;
 
 class CInput;
@@ -31,6 +31,7 @@ private:
 	CField* field;
 	vector<vector<short>> activeBlock;
 	Pos pos;
+	int count;
 	int downTime;
 	int waitTime;
 	bool flag_BlockStop;

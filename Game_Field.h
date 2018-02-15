@@ -3,9 +3,9 @@
 
 #include <vector>
 
-#define VECTOR_CAPACITY_NUM	10000 //あらかじめ確保しておく可変長配列の要素数
-#define LINEUP_TIME_NUM 10000	//自動でラインが上がるまでの猶予時間(mS)
-#define VANISH_MIN_MUN 3	//同色がつながっていた時に消えるための最小数
+#define VECTOR_CAPACITY_NUM	10000	//あらかじめ確保しておく可変長配列の要素数
+#define LINEUP_TIME_NUM 10000		//自動でラインが上がるまでの猶予時間(mS)
+#define VANISH_MIN_MUN 3			//同色がつながっていた時に消えるための最小数
 
 using namespace std;
 
@@ -26,6 +26,7 @@ private:
 	CInput * input;
 	CDataLoader * data;
 	bool flag_Grid;	//グリッド線の描画フラグ
+	int count;
 	int lineUpTime;
 	unsigned int topDrowLineNow;
 	int bufferBlocks[FIELD_HEIGHT][FIELD_WIDTH];
