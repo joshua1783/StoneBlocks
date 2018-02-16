@@ -15,9 +15,9 @@ CDataLoader::CDataLoader():system(0), loadNum(1.0), loadCount(0){
 CDataLoader* CDataLoader::GetInstance() {
 
 	//インスタンス生成
-	static CDataLoader instance;
+	static CDataLoader *instance = new CDataLoader;
 
-	return &instance;
+	return instance;
 }
 
 //素材の読み込みを行う関数

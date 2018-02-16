@@ -30,8 +30,9 @@ enum BlockType {
 enum GameStatus {
 	GS_NewActiveBlock,
 	GS_ActiveBlockMove,
-	GS_CheckFieldBlock,
-	GS_DropBlocks,
+	GS_CheckFieldBlocks,
+	GS_VanishFieldBlocks,
+	GS_FallBlocks,
 };
 
 #endif // !COMMON_H

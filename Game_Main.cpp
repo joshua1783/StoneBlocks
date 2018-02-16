@@ -16,11 +16,10 @@ CGame::CGame(): input(0), field(0), block(0), data(0), timeNow(0), timeOld(GetNo
 	block = CActiveBlock::GetInstance();
 	data  = CDataLoader::GetInstance();
 
-	status = GS_ActiveBlockMove;
-
+	//ステータス初期化
+	status = GS_NewActiveBlock;
 	//素材読み込み
 	data->Load();
-
 }
 
 //CGameのデストラクタ
@@ -41,7 +40,7 @@ CSceneBase* CGame::Updata(CSceneMgr* sceneMgr) {
 	//各クラスの状態推移関数
 	block->UpDate(&status, timeNow);
 	field->UpData(&status, timeNow);
-	
+	printfDx("%d\n", status);
 	return next;
 }
 

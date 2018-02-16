@@ -10,36 +10,40 @@
 //CBlockのコンストラク
 CActiveBlock::CActiveBlock(): input(0), data(0), field(0), downTime(0), waitTime(0), flag_BlockStop(false){
 
+	//インスタンス取得
 	input = CInput::GetInstance();
 	data = CDataLoader::GetInstance();
 	field = CField::GetInstance();
-
+	//アクティブブロック初期化
 	activeBlock = vector<vector<short>>(ACTIVEBLOCK_HEIGHT, vector<short>(ACTIVEBLOCK_WIDTH, -1));
-	MakeNewBlock();
 }
 
 //CBllockのデストラクタ
 CActiveBlock::~CActiveBlock(){
-
 }
 
 //CBlockのインスタンスのポインタを返す関数
 CActiveBlock* CActiveBlock::GetInstance() {
 
 	//インスタンス生成
-	static CActiveBlock instance;
+	static CActiveBlock *instance = new CActiveBlock;
 
-	return &instance;
+	return instance;
 }
 
 //アクティブブロック関係の状態推移関数
 void CActiveBlock::UpDate(int* status, int timeNow) {
+	
+	//新規アクティブブロック作成状態
 	if (*status == GS_NewActiveBlock) {
 		MakeNewBlock();
 		waitTime = 0;
 		flag_BlockStop = false;
 		*status = GS_ActiveBlockMove;
-	}else if (*status == GS_ActiveBlockMove) {
+	}
+	//アクティブブロック操作状態
+	else if (*status == GS_ActiveBlockMove) {
+		//アクティブブロックの移動
 		MoveBlock(timeNow);
 		//ブロックが落下不可の場合,アクティブブロックをフィールドブロックの対応位置に変換
 		if (waitTime >= WAIT_TIME_NUM) {
@@ -49,9 +53,9 @@ void CActiveBlock::UpDate(int* status, int timeNow) {
 					activeBlock[i][j] = -1;
 				}
 			}
-			*status = GS_CheckFieldBlock;
+			//フィールドブロックチェック状態に移行
+			*status = GS_CheckFieldBlocks;
 		}
-
 	}
 
 }
@@ -86,6 +90,7 @@ void CActiveBlock::Draw() {
 void CActiveBlock::MoveBlock(int timeNow) {
 	
 	Pos movePos;
+	//移動量の初期化及び落下猶予時間を加算
 	movePos.x = 0;
 	movePos.y = 0;
 	downTime += timeNow;
@@ -109,10 +114,11 @@ void CActiveBlock::MoveBlock(int timeNow) {
 		movePos.y = 1;
 		downTime = 0;
 	}
-
+	//移動先に壁や他のブロックがなければ移動量を加算
 	pos.x = CheckHitBlock_X(movePos.x) ? pos.x : pos.x + movePos.x;
-	pos.y = CheckHitBlock_Y() ? pos.y : pos.y + movePos.y;
-
+	pos.y = CheckHitBlock_Y()		   ? pos.y : pos.y + movePos.y;
+	//ブロックが下に落ちれないときにした入力があった場合即固定
+	//そうでなければ固定猶予時間を加算
 	if (CheckHitBlock_Y() && flag_BlockStop == true) {
 		waitTime = WAIT_TIME_NUM;
 	}else if (CheckHitBlock_Y() && flag_BlockStop == false) {
@@ -132,10 +138,9 @@ void CActiveBlock::MakeNewBlock() {
 	//位置を初期化
 	pos.x = FIELD_WIDTH / 2;
 	pos.y = 0;
-
+	//ランダムに色を格納
 	for (int i = 0; i < ACTIVEBLOCK_HEIGHT; i++){
 		for (int j = 0; j < ACTIVEBLOCK_WIDTH; j++){
-
 			activeBlock[i][j] = GetRand(BlockType_Num - 1);
 		}
 	}
@@ -170,7 +175,7 @@ bool CActiveBlock::CheckHitBlock_Y() {
 	if (field->GetFieldBlockType(pos.x, pos.y + ACTIVEBLOCK_HEIGHT) != -1) {
 		return true;
 	}
-
+	//ここまでくると移動先に障害物なし(移動可)
 	waitTime = 0;
 	flag_BlockStop = false;
 

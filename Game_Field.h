@@ -34,9 +34,10 @@ private:
 	vector<vector<short>> fieldBlocks;
 	void MakeNewLine();
 	void LineUp();
-	int CheckFieldBlocks();
+	void CheckFieldBlocks();
 	void CountSameBlock(int, int);
-	void DropBlocks();
+	int VanishFieldBlocks();
+	bool FallBlocks();
 };
 
 #endif // !GAME_FIELD_H

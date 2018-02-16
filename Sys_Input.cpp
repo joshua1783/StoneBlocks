@@ -13,9 +13,9 @@ CInput::CInput(){
 CInput* CInput::GetInstance(){
 
 	//インスタンス生成
-	static CInput instance;
+	static CInput *instance = new CInput;
 
-	return &instance;
+	return instance;
 }
 
 //全てのキー状態を取得する関数
