@@ -40,7 +40,7 @@ CSceneBase* CGame::Updata(CSceneMgr* sceneMgr) {
 	//ŠeƒNƒ‰ƒX‚Ìó‘Ô„ˆÚŠÖ”
 	block->UpDate(&status, timeNow);
 	field->UpData(&status, timeNow);
-	printfDx("%d\n", status);
+
 	return next;
 }
 

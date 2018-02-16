@@ -6,7 +6,7 @@
 #include "Gama_ActiveBlock.h"
 
 //CFieldのコンストラクタ
-CField::CField() : flag_Grid(false), lineUpTime(0), topDrowLineNow(0), bufferBlocks(), input(0), data(0), newLineBlocks(FIELD_WIDTH, -1) {
+CField::CField() : flag_Grid(false), lineUpTime(0), topDrowLineNow(0), vanishBlocks(), input(0), data(0), newLineBlocks(FIELD_WIDTH, -1) {
 
 	//インスタンス取得
 	input = CInput::GetInstance();
@@ -38,32 +38,42 @@ void CField::UpData(int* status,int timeNow) {
 	if (input->CheckKey(KEY_INPUT_TAB) == 1)
 		flag_Grid = !flag_Grid;
 
+	//アクティブブロック移動状態時
 	if (*status == GS_ActiveBlockMove) {
 		lineUpTime += timeNow;
-	}else if (*status == GS_CheckFieldBlocks) {
+	}
+	//フィールドブロックチェック状態時
+	else if (*status == GS_CheckFieldBlocks) {
+		//ラインアップの時間に達しているならフィールドブロックのラインを上げる
 		if (lineUpTime >= LINEUP_TIME_NUM) {
 			LineUp();
 			lineUpTime = 0;
 		}
+
+		//フィールドブロックに並んでいる物がないかチェック
 		CheckFieldBlocks();
 		count = 0;
+		//フィールドブロック消去状態に移行
 		*status = GS_VanishFieldBlocks;
-	}else if (*status == GS_VanishFieldBlocks) {
+	}
+	//フィールドブロック消去状態時
+	else if (*status == GS_VanishFieldBlocks) {
 		count += timeNow;
-		if (count >= 300) {
+		if (count >= VANISH_TIME_NUM) {
+			count = 0;
+			//消去フラグの立っているブロックを消去
+			//消えるブロックの有無で次の状態変化
 			*status = VanishFieldBlocks();
-			count = 0;
 		}
-	}else if (*status == GS_FallBlocks) {
+	}
+	//空中ブロック落下状態時
+	else if (*status == GS_FallBlocks) {
 		count += timeNow;
-		if (count >= 500) {
-			if (FallBlocks()) {
-				*status = GS_FallBlocks;
-			}
-			else {
-				*status = GS_CheckFieldBlocks;
-			}
+		if (count >= FALL_TIME_NUM) {
 			count = 0;
+			//空中に浮いたブロックの落下
+			//浮いたブロックの有無で次の状態変化
+			*status = FallBlocks();
 		}
 	}
 }
@@ -83,7 +93,7 @@ void CField::Draw() {
 			DrawLine(BLOCK_SIZE * j + MARGIN_WIDTH, MARGIN_HEIGHT, BLOCK_SIZE * j + MARGIN_WIDTH, FIELD_HEIGHT * BLOCK_SIZE + MARGIN_HEIGHT, CR_White);
 		}
 	}
-	//fieldBlocksの各要素に対応した色のブロック描画
+	//各要素に対応した色のブロック描画
 	for (int i = 0; i < FIELD_HEIGHT; i++){
 		for (int j = 0; j < FIELD_WIDTH; j++){
 			//フィールドのブロック描画
@@ -147,10 +157,10 @@ void CField::MakeNewLine() {
 void CField::LineUp() {
 
 	//フィールドブロックの末尾に新しいラインを追加
-	fieldBlocks.emplace_back(newLineBlocks);
 	//フィールドブロックの現在の描画する最大ラインをずらす
-	topDrowLineNow++;
 	//次の新しいラインブロックを作成
+	fieldBlocks.emplace_back(newLineBlocks);
+	topDrowLineNow++;
 	MakeNewLine();
 }
 
@@ -162,7 +172,7 @@ void CField::CheckFieldBlocks() {
 	// 1:消えるブロック
 	for (int i = 0; i < FIELD_HEIGHT; i++) {
 		for (int j = 0; j < FIELD_WIDTH; j++) {
-			bufferBlocks[i][j] = 0;
+			vanishBlocks[i][j] = 0;
 		}
 	}
 	//同色のブロックがつながっているかを探索
@@ -187,7 +197,7 @@ void CField::CountSameBlock(int x, int y) {
 	for (int i = 0; x + i < FIELD_WIDTH && color == GetFieldBlockType(x + i, y); i++, num++){}
 	if (num >= VANISH_MIN_MUN) {
 		for (int j = 0; j < num; j++) {
-			bufferBlocks[y][x + j] = 1;
+			vanishBlocks[y][x + j] = 1;
 		}
 	}
 	//上から下にかけて同色ブロックを探索,指定数以上なら該当ブロックに消去フラグを立てる
@@ -195,7 +205,7 @@ void CField::CountSameBlock(int x, int y) {
 	for (int i = 0; y + i < FIELD_HEIGHT && color == GetFieldBlockType(x, y + i); i++, num++) {}
 	if (num >= VANISH_MIN_MUN) {
 		for (int j = 0; j < num; j++) {
-			bufferBlocks[y + j][x] = 1;
+			vanishBlocks[y + j][x] = 1;
 		}
 	}
 	//左上から右下にかけて同色ブロックを探索,指定数以上なら該当ブロックに消去フラグを立てる
@@ -203,7 +213,7 @@ void CField::CountSameBlock(int x, int y) {
 	for (int i = 0; x + i < FIELD_WIDTH && y + i < FIELD_HEIGHT && color == GetFieldBlockType(x + i, y + i); i++, num++) {}
 	if (num >= VANISH_MIN_MUN) {
 		for (int j = 0; j < num; j++) {
-			bufferBlocks[y + j][x + j] = 1;
+			vanishBlocks[y + j][x + j] = 1;
 		}
 	}
 	//右上から左下にかけて同色ブロックを探索,指定数以上なら該当ブロックに消去フラグを立てる
@@ -211,7 +221,7 @@ void CField::CountSameBlock(int x, int y) {
 	for (int i = 0; x - i >= 0 && y + i < FIELD_HEIGHT && color == GetFieldBlockType(x - i, y + i); i++, num++) {}
 	if (num >= VANISH_MIN_MUN) {
 		for (int j = 0; j < num; j++) {
-			bufferBlocks[y + j][x - j] = 1;
+			vanishBlocks[y + j][x - j] = 1;
 		}
 	}
 }
@@ -224,43 +234,52 @@ int CField::VanishFieldBlocks() {
 	//消去フラグが立っているブロックがあれば該当ブロックを消去
 	for (int i = 0; i < FIELD_HEIGHT; i++) {
 		for (int j = 0; j < FIELD_WIDTH; j++) {
-			if (bufferBlocks[i][j] == 1) {
+			if (vanishBlocks[i][j] == 1) {
 				flag_Vanish = true;
 				fieldBlocks[i + topDrowLineNow][j] = -1;
 			}
 		}
 	}
+
 	//一つでも消えるブロックがあったならGS_FallBlocksに移動
 	//そうでなければ次のアクティブブロックを生成
 	if (flag_Vanish == true) {
 		return GS_FallBlocks;
-	}
-	else {
+	}else {
 		return GS_NewActiveBlock;
 	}
 }
 
-
 //下に空白ができたブロックを落とす関数
-bool CField::FallBlocks() {
+int CField::FallBlocks() {
 
 	int line;
 	bool flag_Fall = false;
 
+	//フィールド端から探索し浮いたブロックを探索
 	for (int j = 0; j < FIELD_WIDTH; j++) {
 		for (int i = FIELD_HEIGHT -1; i >= 0; i--){
+			//探索ますが空白ならば
 			if (GetFieldBlockType(j, i) == -1) {
+				//空白は飛ばすかつライン上限ならば次の列へ
 				for (line = i - 1; line >= 0 && GetFieldBlockType(j, line) == -1; line--) {};
 				if (line < 0) break;
-
+				//ここまできたならば何かしらのブロック有
+				//ブロックを1マス落とす
 				flag_Fall = true;
-				for (line = i; line >= 0; line--){
+				for (line = i + topDrowLineNow; line >= 0; line--){
 					if (line - 1 >= 0) 
-						fieldBlocks[line + topDrowLineNow][j] = fieldBlocks[(line - 1) + topDrowLineNow][j];
+						fieldBlocks[line][j] = fieldBlocks[line - 1][j];
 				}
 			}
 		}
 	}
 	
-	return flag_Fall;
+	//落ちるブロックがあったならば落下状態続行
+	//なければフィールドブロックチェック状態に移行
+	if (flag_Fall == true) {
+		return GS_FallBlocks;
+	}else {
+		return GS_CheckFieldBlocks;
+	}
 }

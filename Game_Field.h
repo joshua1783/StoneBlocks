@@ -4,8 +4,10 @@
 #include <vector>
 
 #define VECTOR_CAPACITY_NUM	10000	//あらかじめ確保しておく可変長配列の要素数
-#define LINEUP_TIME_NUM 10000		//自動でラインが上がるまでの猶予時間(mS)
 #define VANISH_MIN_MUN 3			//同色がつながっていた時に消えるための最小数
+#define LINEUP_TIME_NUM 10000		//自動でラインが上がるまでの猶予時間(mS)
+#define VANISH_TIME_NUM 350			//フィールドブロックが消失するまでの猶予時間(mS)		
+#define FALL_TIME_NUM 500			//浮いたブロックが1マス落ちるまでの猶予時間(mS)
 
 using namespace std;
 
@@ -29,7 +31,7 @@ private:
 	int count;
 	int lineUpTime;
 	unsigned int topDrowLineNow;
-	int bufferBlocks[FIELD_HEIGHT][FIELD_WIDTH];
+	int vanishBlocks[FIELD_HEIGHT][FIELD_WIDTH];
 	vector<short> newLineBlocks;
 	vector<vector<short>> fieldBlocks;
 	void MakeNewLine();
@@ -37,7 +39,7 @@ private:
 	void CheckFieldBlocks();
 	void CountSameBlock(int, int);
 	int VanishFieldBlocks();
-	bool FallBlocks();
+	int FallBlocks();
 };
 
 #endif // !GAME_FIELD_H
