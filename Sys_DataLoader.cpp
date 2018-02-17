@@ -1,15 +1,10 @@
 #include <DxLib.h>
 #include "Common.h"
 #include "SceneMgr.h"
-#include "Sys_Main.h"
 #include "Sys_DataLoader.h"
 
 //CDataLoaderのコンストラクタ
-CDataLoader::CDataLoader():system(0), loadCount(0){
-
-	//インスタンス取得
-	system = CSystem::GetInstance();
-}
+CDataLoader::CDataLoader():loadCount(0){}
 
 //CDataLoaderのインスタンスのポインタを返す関数
 CDataLoader* CDataLoader::GetInstance() {
@@ -30,6 +25,7 @@ void CDataLoader::Load() {
 		ImgLoad(img_BlockBlue, "img/Block_Blue.png");
 		ImgLoad(img_BlockGreen, "img/Block_Green.png");
 		ImgLoad(img_BlockYellow, "img/Block_Yellow.png");
+		ImgLoad(img_EndIcon, "img/EndIcon.png");
 
 		//分割画像
 		LoadDivGraph("img/Effect_Red.png", 14, 14, 1, 48, 48, img_EffectRed);
@@ -83,6 +79,9 @@ int CDataLoader::GetImg_EffectGreen(int i) const {
 int CDataLoader::GetImg_EffectYellow(int i) const {
 	return img_EffectYellow[i];
 }
+int CDataLoader::GetImg_EndIcon() const {
+	return img_EndIcon;
+}
 
 
 //素材の読み込み状況を％表示する関数
@@ -90,7 +89,7 @@ void CDataLoader::LoadParcent() {
 	//読み込んだ素材数をカウントし、進行率を表示
 	loadCount++;
 	ClearDrawScreen();
-	DrawStringToHandle(0, 0, "NowLading…", CR_White, system->GetFontHandle(FontHandle_S));
-	DrawFormatStringToHandle(0, 100, CR_White, system->GetFontHandle(FontHandle_S), "%.0f％", loadCount / MATERIAL_NUM * 100);
+	DrawStringToHandle(SCREEN_HEIGHT / 2, SCREEN_HEIGHT - 50, "NowLading…", CR_White, FONTSIZE_M);
+	DrawFormatStringToHandle(SCREEN_HEIGHT / 2 + 230, SCREEN_HEIGHT - 50, CR_White, FONTSIZE_M, "%.0f％", loadCount / MATERIAL_NUM * 100);
 	ScreenFlip();
 }

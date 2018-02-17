@@ -4,16 +4,18 @@
 #include "Game_Main.h"
 #include "Game_Field.h"
 #include "Gama_ActiveBlock.h"
+#include "Game_Effect.h"
 #include "Sys_Input.h"
 #include "Sys_DataLoader.h"
 
 //CGameのコンストラクタ
-CGame::CGame(): input(0), field(0), block(0), data(0), timeNow(0), timeOld(GetNowCount()){
+CGame::CGame(): input(0), field(0), block(0), effect(0), data(0), timeNow(0), timeOld(GetNowCount()){
 
 	//インスタンス取得
 	input = CInput::GetInstance();
 	field = CField::GetInstance();
 	block = CActiveBlock::GetInstance();
+	effect = CEffect::GetInstance();
 	data  = CDataLoader::GetInstance();
 
 	//ステータス初期化
@@ -38,9 +40,11 @@ CSceneBase* CGame::Updata(CSceneMgr* sceneMgr) {
 	timeOld = time;
 
 	//各クラスの状態推移関数
+	effect->UpData(&status, timeNow);
 	block->UpDate(&status, timeNow);
 	field->UpData(&status, timeNow);
-
+	
+	if (status == GS_GameOver)	printfDx("GameOver\n");
 	return next;
 }
 
@@ -51,6 +55,7 @@ void CGame::Draw(CSceneMgr* sceneMgr) {
 	//各クラスの描画関数
 	field->Draw();
 	block->Draw();
+	if (status == GS_VanishFieldBlocks) effect->Draw();
 }
 
 //1フレームの遷移時間を返す関数

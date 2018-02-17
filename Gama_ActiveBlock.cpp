@@ -8,7 +8,7 @@
 #include "Sys_DataLoader.h"
 
 //CBlockのコンストラク
-CActiveBlock::CActiveBlock(): input(0), data(0), field(0), downTime(0), waitTime(0), flag_BlockStop(false){
+CActiveBlock::CActiveBlock(): input(0), data(0), field(0), nextBlock(), downTime(0), waitTime(0), flag_BlockStop(false){
 
 	//インスタンス取得
 	input = CInput::GetInstance();
@@ -16,6 +16,8 @@ CActiveBlock::CActiveBlock(): input(0), data(0), field(0), downTime(0), waitTime
 	field = CField::GetInstance();
 	//アクティブブロック初期化
 	activeBlock = vector<vector<short>>(ACTIVEBLOCK_HEIGHT, vector<short>(ACTIVEBLOCK_WIDTH, -1));
+	MakeNewBlock();
+	
 }
 
 //CBllockのデストラクタ
@@ -62,12 +64,16 @@ void CActiveBlock::UpDate(int* status, int timeNow) {
 
 //アクティブブロック関係の描画関数
 void CActiveBlock::Draw() {
-
+	
+	//次のブロックを描画するための枠の描画
+	DrawBox(FIELD_WIDTH * BLOCK_SIZE + MARGIN_WIDTH * 2, MARGIN_HEIGHT, SCREEN_WIDTH - MARGIN_WIDTH, MARGIN_HEIGHT + 200, CR_Black, TRUE);
+	DrawFormatString(FIELD_WIDTH * BLOCK_SIZE + MARGIN_WIDTH * 3, MARGIN_HEIGHT + 10, CR_White, "Next");
 	//activeBlockの各要素に対応した色のブロック描画
 	for (int i = 0; i < ACTIVEBLOCK_HEIGHT; i++) {
 		for (int j = 0; j < ACTIVEBLOCK_WIDTH; j++) {
-			//アクティブブロックの描画
-			switch (activeBlock[i][j]) {
+			//アクティブブロックの描画(枠外は描画しない)
+			if (BLOCK_SIZE * (i + pos.y) >= 0) {
+				switch (activeBlock[i][j]) {
 				case BlockType_Red:
 					DrawGraph(BLOCK_SIZE * (j + pos.x) + MARGIN_WIDTH, BLOCK_SIZE * (i + pos.y) + MARGIN_HEIGHT, data->GetImg_BlockRed(), TRUE);
 					break;
@@ -82,6 +88,24 @@ void CActiveBlock::Draw() {
 					break;
 				default:
 					break;
+				}
+			}
+			//次のブロックを描画
+			switch (nextBlock[i][j]){
+			case BlockType_Red:
+				DrawGraph(BLOCK_SIZE * j + NEXTBLOCK_X, BLOCK_SIZE * i + NEXTBLOCK_Y, data->GetImg_BlockRed(), TRUE);
+				break;
+			case BlockType_Blue:
+				DrawGraph(BLOCK_SIZE * j + NEXTBLOCK_X, BLOCK_SIZE * i + NEXTBLOCK_Y, data->GetImg_BlockBlue(), TRUE);
+				break;
+			case BlockType_Green:
+				DrawGraph(BLOCK_SIZE * j + NEXTBLOCK_X, BLOCK_SIZE * i + NEXTBLOCK_Y, data->GetImg_BlockGreen(), TRUE);
+				break;
+			case BlockType_Yellow:
+				DrawGraph(BLOCK_SIZE * j + NEXTBLOCK_X, BLOCK_SIZE * i + NEXTBLOCK_Y, data->GetImg_BlockYellow(), TRUE);
+				break;
+			default:
+				break;
 			}
 		}
 	}
@@ -137,11 +161,17 @@ void CActiveBlock::MakeNewBlock() {
 
 	//位置を初期化
 	pos.x = FIELD_WIDTH / 2;
-	pos.y = 0;
-	//ランダムに色を格納
+	pos.y = -1;
+	//次のブロックだったものをアクティブブロックに代入
+	for (int i = 0; i < ACTIVEBLOCK_HEIGHT; i++) {
+		for (int j = 0; j < ACTIVEBLOCK_WIDTH; j++) {
+			activeBlock[i][j] = nextBlock[i][j];
+		}
+	}
+	//次のネクストブロックにランダムに色を格納
 	for (int i = 0; i < ACTIVEBLOCK_HEIGHT; i++){
 		for (int j = 0; j < ACTIVEBLOCK_WIDTH; j++){
-			activeBlock[i][j] = GetRand(BlockType_Num - 1);
+			nextBlock[i][j] = GetRand(BlockType_Num - 1);
 		}
 	}
 }

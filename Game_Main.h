@@ -4,6 +4,7 @@
 class CInput;
 class CField;
 class CActiveBlock;
+class CEffect;
 class CDataLoader;
 
 //ゲームシーン全体を管理するクラス
@@ -19,6 +20,7 @@ private:
 	CInput * input;
 	CField* field;
 	CActiveBlock* block;
+	CEffect* effect;
 	CDataLoader * data;
 	int status;
 	int timeNow;

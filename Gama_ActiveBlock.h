@@ -3,8 +3,10 @@
 
 #define ACTIVEBLOCK_WIDTH  1	//アクティブブロックの幅
 #define ACTIVEBLOCK_HEIGHT 2	//アクティブブロックの高さ
+#define NEXTBLOCK_X 590			//次のブロックの描画位置のx座標
+#define NEXTBLOCK_Y 110			//次のブロックの描画位置のy座標
 #define DOWN_TIME_NUM 1500		//アクティブブロックの自由落下までの猶予時間(ｍS)
-#define WAIT_TIME_NUM 1500		//アクティブブロックが固定されるまでの猶予時間(mS)
+#define WAIT_TIME_NUM 2000		//アクティブブロックが固定されるまでの猶予時間(mS)
 	
 using namespace std;
 
@@ -29,6 +31,7 @@ private:
 	CInput * input;
 	CDataLoader * data;
 	CField* field;
+	int nextBlock[ACTIVEBLOCK_HEIGHT][ACTIVEBLOCK_WIDTH];
 	vector<vector<short>> activeBlock;
 	Pos pos;
 	int count;

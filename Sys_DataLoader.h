@@ -10,7 +10,7 @@
 	LoadParcent();\
 }
 
-#define MATERIAL_NUM 9.0	//‘fŞ‘”
+#define MATERIAL_NUM 10.0	//‘fŞ‘”
 
 class CSystem;
 class CSceneMgr;
@@ -31,10 +31,9 @@ public:
 	int GetImg_EffectBlue(int) const;
 	int GetImg_EffectGreen(int) const;
 	int GetImg_EffectYellow(int) const;
+	int GetImg_EndIcon() const;
 private:
-	CSystem * system;
-	CSceneMgr* scene;
-	int loadCount;			//ƒ[ƒh‚µ‚½‘fŞ”
+	int loadCount;	//ƒ[ƒh‚µ‚½‘fŞ”
 	//ˆÈ‰ºAŠe‘fŞƒnƒ“ƒhƒ‹Ši”[—p‚Ì•Ï”
 	int img_Background_Game;
 	int img_BlockRed;
@@ -45,6 +44,7 @@ private:
 	int img_EffectBlue[14];
 	int img_EffectGreen[14];
 	int img_EffectYellow[14];
+	int img_EndIcon;
 
 	void LoadParcent();
 };
