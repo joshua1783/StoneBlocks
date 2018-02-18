@@ -5,6 +5,7 @@ class CInput;
 class CField;
 class CActiveBlock;
 class CEffect;
+class CPause;
 class CFontHandle;
 class CDataLoader;
 
@@ -22,6 +23,7 @@ private:
 	CField* field;
 	CActiveBlock* block;
 	CEffect* effect;
+	CPause* pause;
 	CFontHandle* font;
 	CDataLoader * data;
 	int status;

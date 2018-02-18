@@ -4,6 +4,7 @@
 //複数のファイルで使用される定数やマクロを定義するヘッダ
 
 #define CR_White GetColor(255, 255, 255)
+#define CR_Red   GetColor(255, 0, 0)
 #define CR_Black GetColor(0, 0, 0)
 
 #define SCREEN_WIDTH  750	//ウィンドウ幅
@@ -32,6 +33,7 @@ enum GameStatus {
 	GS_FallBlocks,
 	GS_CheckGameOver,
 	GS_GameOver,
+	GS_Pause,
 };
 
 #endif // !COMMON_H

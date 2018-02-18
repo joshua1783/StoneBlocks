@@ -6,7 +6,7 @@ CFontHandle::CFontHandle(){
 	//フォトハンドルの設定
 	fontHandle_S = CreateFontToHandle(NULL, 24, 3);	//フォントサイズ小
 	fontHandle_M = CreateFontToHandle(NULL, 40, 3);	//フォントサイズ中
-	fontHandle_L = CreateFontToHandle(NULL, 60, 3);	//フォントサイズ大
+	fontHandle_L = CreateFontToHandle(NULL, 100, 3);	//フォントサイズ大
 }
 
 CFontHandle::~CFontHandle(){
