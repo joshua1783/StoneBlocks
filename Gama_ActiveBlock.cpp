@@ -5,13 +5,15 @@
 #include "Game_Field.h"
 #include "Gama_ActiveBlock.h"
 #include "Sys_Input.h"
+#include "Sys_Font.h"
 #include "Sys_DataLoader.h"
 
 //CBlockのコンストラク
-CActiveBlock::CActiveBlock(): input(0), data(0), field(0), nextBlock(), downTime(0), waitTime(0), flag_BlockStop(false){
+CActiveBlock::CActiveBlock(): input(0), font(0), data(0), field(0), nextBlock(), downTime(0), waitTime(0), flag_BlockStop(false){
 
 	//インスタンス取得
 	input = CInput::GetInstance();
+	font = CFontHandle::GetInstance();
 	data = CDataLoader::GetInstance();
 	field = CField::GetInstance();
 	//アクティブブロック初期化
@@ -59,7 +61,6 @@ void CActiveBlock::UpDate(int* status, int timeNow) {
 			*status = GS_CheckFieldBlocks;
 		}
 	}
-
 }
 
 //アクティブブロック関係の描画関数
@@ -67,7 +68,7 @@ void CActiveBlock::Draw() {
 	
 	//次のブロックを描画するための枠の描画
 	DrawBox(FIELD_WIDTH * BLOCK_SIZE + MARGIN_WIDTH * 2, MARGIN_HEIGHT, SCREEN_WIDTH - MARGIN_WIDTH, MARGIN_HEIGHT + 200, CR_Black, TRUE);
-	DrawFormatString(FIELD_WIDTH * BLOCK_SIZE + MARGIN_WIDTH * 3, MARGIN_HEIGHT + 10, CR_White, "Next");
+	DrawStringToHandle(FIELD_WIDTH * BLOCK_SIZE + 140, MARGIN_HEIGHT + 10, "Next", CR_White, font->GetFont_M());
 	//activeBlockの各要素に対応した色のブロック描画
 	for (int i = 0; i < ACTIVEBLOCK_HEIGHT; i++) {
 		for (int j = 0; j < ACTIVEBLOCK_WIDTH; j++) {
@@ -125,8 +126,10 @@ void CActiveBlock::MoveBlock(int timeNow) {
 	}
 	//x座標移動入力
 	if ((input->CheckKey(KEY_INPUT_A) % 8) == 1 || (input->CheckKey(KEY_INPUT_LEFT) % 8) == 1) {
+		PlaySoundMem(data->GetSe_Move(), DX_PLAYTYPE_BACK);
 		movePos.x = -1;
 	}else if ((input->CheckKey(KEY_INPUT_D) % 8) == 1 || (input->CheckKey(KEY_INPUT_RIGHT) % 8) == 1) {
+		PlaySoundMem(data->GetSe_Move(), DX_PLAYTYPE_BACK);
 		movePos.x = 1;
 	}
 	//y座標移動入力

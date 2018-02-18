@@ -35,6 +35,7 @@ private:
 	int vanishBlocks[FIELD_HEIGHT][FIELD_WIDTH];
 	vector<short> newLineBlocks;
 	vector<vector<short>> fieldBlocks;
+
 	void MakeNewLine();
 	void LineUp();
 	int CheckFieldBlocks();

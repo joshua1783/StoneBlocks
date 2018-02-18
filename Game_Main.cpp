@@ -6,6 +6,7 @@
 #include "Gama_ActiveBlock.h"
 #include "Game_Effect.h"
 #include "Sys_Input.h"
+#include "Sys_Font.h"
 #include "Sys_DataLoader.h"
 
 //CGameのコンストラクタ
@@ -16,16 +17,21 @@ CGame::CGame(): input(0), field(0), block(0), effect(0), data(0), timeNow(0), ti
 	field = CField::GetInstance();
 	block = CActiveBlock::GetInstance();
 	effect = CEffect::GetInstance();
+	font = CFontHandle::GetInstance();
 	data  = CDataLoader::GetInstance();
 
 	//ステータス初期化
 	status = GS_NewActiveBlock;
 	//素材読み込み
 	data->Load();
+	PlaySoundMem(data->GetSe_Bgm(), DX_PLAYTYPE_LOOP);
 }
 
 //CGameのデストラクタ
 CGame::~CGame(){
+	delete block;
+	delete field;
+	delete effect;
 }
 
 //ゲームシーンの状態推移関数
@@ -44,7 +50,6 @@ CSceneBase* CGame::Updata(CSceneMgr* sceneMgr) {
 	block->UpDate(&status, timeNow);
 	field->UpData(&status, timeNow);
 	
-	if (status == GS_GameOver)	printfDx("GameOver\n");
 	return next;
 }
 
@@ -56,11 +61,14 @@ void CGame::Draw(CSceneMgr* sceneMgr) {
 	field->Draw();
 	block->Draw();
 	if (status == GS_VanishFieldBlocks) effect->Draw();
+
+	if (status == GS_GameOver) {
+		DrawGraph(10, BLOCK_SIZE * 5 + MARGIN_HEIGHT, data->GetImg_GameOver(), TRUE);
+	}
 }
 
 //1フレームの遷移時間を返す関数
 int CGame::GetTimeNow() {
-
 	return timeNow;
 }
 

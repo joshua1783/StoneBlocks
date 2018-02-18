@@ -6,10 +6,6 @@
 #define CR_White GetColor(255, 255, 255)
 #define CR_Black GetColor(0, 0, 0)
 
-#define FONTSIZE_S CreateFontToHandle(NULL, 24, 3)	//フォントサイズ小
-#define FONTSIZE_M CreateFontToHandle(NULL, 40, 3)	//フォントサイズ中
-#define FONTSIZE_L CreateFontToHandle(NULL, 60, 3)	//フォントサイズ大
-
 #define SCREEN_WIDTH  750	//ウィンドウ幅
 #define SCREEN_HEIGHT 800	//ウィンドウ高さ
 

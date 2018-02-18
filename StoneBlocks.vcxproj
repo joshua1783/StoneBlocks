@@ -141,6 +141,7 @@
     <ClCompile Include="Game_Main.cpp" />
     <ClCompile Include="SceneMgr.cpp" />
     <ClCompile Include="Sys_DataLoader.cpp" />
+    <ClCompile Include="Sys_Font.cpp" />
     <ClCompile Include="Sys_Input.cpp" />
     <ClCompile Include="Sys_Main.cpp" />
   </ItemGroup>
@@ -153,6 +154,7 @@
     <ClInclude Include="SceneBase.h" />
     <ClInclude Include="SceneMgr.h" />
     <ClInclude Include="Sys_DataLoader.h" />
+    <ClInclude Include="Sys_Font.h" />
     <ClInclude Include="Sys_Input.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

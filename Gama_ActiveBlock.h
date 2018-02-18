@@ -6,11 +6,12 @@
 #define NEXTBLOCK_X 590			//次のブロックの描画位置のx座標
 #define NEXTBLOCK_Y 110			//次のブロックの描画位置のy座標
 #define DOWN_TIME_NUM 1500		//アクティブブロックの自由落下までの猶予時間(ｍS)
-#define WAIT_TIME_NUM 2000		//アクティブブロックが固定されるまでの猶予時間(mS)
+#define WAIT_TIME_NUM 1500		//アクティブブロックが固定されるまでの猶予時間(mS)
 	
 using namespace std;
 
 class CInput;
+class CFontHandle;
 class CDataLoader;
 class CField;
 
@@ -29,6 +30,7 @@ public:
 	void Draw();
 private:
 	CInput * input;
+	CFontHandle* font;
 	CDataLoader * data;
 	CField* field;
 	int nextBlock[ACTIVEBLOCK_HEIGHT][ACTIVEBLOCK_WIDTH];

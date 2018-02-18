@@ -4,13 +4,15 @@
 #include "Game_Field.h"
 #include "Game_Effect.h"
 
+//CEffectnodのコンストラクタ
 CEffect::CEffect() : field(0), data(0), count(0), num(0) {
 
 	//インスタンス取得
 	field = CField::GetInstance();
-	data = CDataLoader::GetInstance();
+	data  = CDataLoader::GetInstance();
 }
 
+//CEffectnodのインスタンスのポインタを返す関数
 CEffect* CEffect::GetInstance() {
 
 	//インスタンス生成
@@ -19,10 +21,15 @@ CEffect* CEffect::GetInstance() {
 	return instance;
 }
 
+//CEffectの状態推移関数
 void CEffect::UpData(int* status, int timeNow) {
+
+	//ブロック消去状態ならば猶予時間ごとにフレーム数を加算
+	//それ以外ならば変数初期化
 	if (*status == GS_VanishFieldBlocks) {
 		count += timeNow;
 		if (count >= EFFECT_FLAME_TIME_NUM) {
+			if (num == 0) PlaySoundMem(data->GetSe_Break(), DX_PLAYTYPE_BACK);
 			num++;
 			count = 0;
 			if (num > EFFECT_BREAK_NUM) {
@@ -31,13 +38,16 @@ void CEffect::UpData(int* status, int timeNow) {
 		}
 	}else {
 		count = 0;
-		num = 0;
+		num   = 0;
 	}
 }
 
-void CEffect::Draw() {	
+//CEffectの描画関数
+void CEffect::Draw() {
+
 	for (int i = 0; i < FIELD_HEIGHT; i++){
 		for (int j = 0; j < FIELD_WIDTH; j++) {
+			//消えるブロックがあるなら該当座標にエフェクト描画
 			if (field->GetVanishBlock(j, i) == 1) {
 				switch (field->GetFieldBlockType(j, i)) {
 				case BlockType_Red:

@@ -1,10 +1,15 @@
 #include <DxLib.h>
 #include "Common.h"
 #include "SceneMgr.h"
+#include "Sys_Font.h"
 #include "Sys_DataLoader.h"
 
 //CDataLoaderのコンストラクタ
-CDataLoader::CDataLoader():loadCount(0){}
+CDataLoader::CDataLoader():font(0), loadCount(0){
+
+	//インスタンス取得
+	font = CFontHandle::GetInstance();
+}
 
 //CDataLoaderのインスタンスのポインタを返す関数
 CDataLoader* CDataLoader::GetInstance() {
@@ -26,6 +31,7 @@ void CDataLoader::Load() {
 		ImgLoad(img_BlockGreen, "img/Block_Green.png");
 		ImgLoad(img_BlockYellow, "img/Block_Yellow.png");
 		ImgLoad(img_EndIcon, "img/EndIcon.png");
+		ImgLoad(img_GameOver, "img/GameOver.png");
 
 		//分割画像
 		LoadDivGraph("img/Effect_Red.png", 14, 14, 1, 48, 48, img_EffectRed);
@@ -44,11 +50,27 @@ void CDataLoader::Load() {
 		if (img_EffectYellow[0] == -1)
 			throw "img/Effect_Yellow.png";
 		LoadParcent();
+
+		//効果音
+		SoundLoad(se_Break, 80, "se/Break.wav");
+		SoundLoad(se_Move, 50, "se/Move.wav");
+		SoundLoad(se_Bgm, 70, "se/BGM.wav");
+		
 	}
 	catch (const char* msg) {
-		printfDx("Load Error -> %s", msg);
+		printfDx("Load Error -> %s\n", msg);
 		WaitKey();
 	}
+}
+
+//素材の読み込み状況を％表示する関数
+void CDataLoader::LoadParcent() {
+	//読み込んだ素材数をカウントし、進行率を表示
+	loadCount++;
+	ClearDrawScreen();
+	DrawStringToHandle(SCREEN_HEIGHT / 2, SCREEN_HEIGHT - 50, "NowLading…", CR_White, font->GetFont_M());
+	DrawFormatStringToHandle(SCREEN_HEIGHT / 2 + 230, SCREEN_HEIGHT - 50, CR_White, font->GetFont_M(), "%.0f％", loadCount / MATERIAL_NUM * 100);
+	ScreenFlip();
 }
 
 //以下、各素材ハンドルを返す関数
@@ -82,14 +104,15 @@ int CDataLoader::GetImg_EffectYellow(int i) const {
 int CDataLoader::GetImg_EndIcon() const {
 	return img_EndIcon;
 }
-
-
-//素材の読み込み状況を％表示する関数
-void CDataLoader::LoadParcent() {
-	//読み込んだ素材数をカウントし、進行率を表示
-	loadCount++;
-	ClearDrawScreen();
-	DrawStringToHandle(SCREEN_HEIGHT / 2, SCREEN_HEIGHT - 50, "NowLading…", CR_White, FONTSIZE_M);
-	DrawFormatStringToHandle(SCREEN_HEIGHT / 2 + 230, SCREEN_HEIGHT - 50, CR_White, FONTSIZE_M, "%.0f％", loadCount / MATERIAL_NUM * 100);
-	ScreenFlip();
+int CDataLoader::GetImg_GameOver() const {
+	return img_GameOver;
+}
+int CDataLoader::GetSe_Break() const {
+	return se_Break;
+}
+int CDataLoader::GetSe_Move() const {
+	return se_Move;
+}
+int CDataLoader::GetSe_Bgm() const {
+	return se_Bgm;
 }

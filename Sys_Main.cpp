@@ -17,9 +17,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetMainWindowText("StoneBlocks");
 	SetGraphMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32);
 
-	//フォントサイズ指定
-	SetFontSize(45);
-	
 	//インスタンス取得
 	CInput* input = CInput::GetInstance();
 	CSceneMgr* scene = CSceneMgr::GetInstance();
