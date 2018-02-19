@@ -140,6 +140,7 @@
     <ClCompile Include="Game_Field.cpp" />
     <ClCompile Include="Game_Main.cpp" />
     <ClCompile Include="Game_Pause.cpp" />
+    <ClCompile Include="Game_Score.cpp" />
     <ClCompile Include="SceneMgr.cpp" />
     <ClCompile Include="Sys_DataLoader.cpp" />
     <ClCompile Include="Sys_Font.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="Game_Field.h" />
     <ClInclude Include="Game_Main.h" />
     <ClInclude Include="Game_Pause.h" />
+    <ClInclude Include="Game_Score.h" />
     <ClInclude Include="SceneBase.h" />
     <ClInclude Include="SceneMgr.h" />
     <ClInclude Include="Sys_DataLoader.h" />

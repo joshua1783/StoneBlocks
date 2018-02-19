@@ -14,6 +14,7 @@ class CInput;
 class CFontHandle;
 class CDataLoader;
 class CField;
+class CScore;
 
 struct Pos{
 	int x;
@@ -33,6 +34,7 @@ private:
 	CFontHandle* font;
 	CDataLoader * data;
 	CField* field;
+	CScore* score;
 	int nextBlock[ACTIVEBLOCK_HEIGHT][ACTIVEBLOCK_WIDTH];
 	vector<vector<short>> activeBlock;
 	Pos pos;

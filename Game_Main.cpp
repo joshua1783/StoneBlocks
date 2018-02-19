@@ -6,24 +6,24 @@
 #include "Gama_ActiveBlock.h"
 #include "Game_Effect.h"
 #include "Game_Pause.h"
+#include "Game_Score.h"
 #include "Sys_Font.h"
 #include "Sys_DataLoader.h"
 
 //CGameのコンストラクタ
-CGame::CGame(): field(0), block(0), effect(0), pause(0), data(0), timeNow(0), timeOld(GetNowCount()){
+CGame::CGame(): field(0), block(0), effect(0), pause(0), score(0), data(0), timeNow(0), timeOld(GetNowCount()){
 
 	//インスタンス取得
 	field = CField::GetInstance();
 	block = CActiveBlock::GetInstance();
 	effect = CEffect::GetInstance();
 	pause = CPause::GetInstance();
+	score = CScore::GetInstance();
 	font = CFontHandle::GetInstance();
 	data  = CDataLoader::GetInstance();
 
 	//ステータス初期化
-	status = GS_NewActiveBlock;
-
-	PlaySoundMem(data->GetSe_Bgm(), DX_PLAYTYPE_LOOP);
+	status = GS_SetUp;
 }
 
 //CGameのデストラクタ
@@ -32,6 +32,7 @@ CGame::~CGame(){
 	delete field;
 	delete effect;
 	delete pause;
+	delete score;
 }
 
 //ゲームシーンの状態推移関数
@@ -45,12 +46,18 @@ CSceneBase* CGame::Updata(CSceneMgr* sceneMgr) {
 	timeNow = time - timeOld;
 	timeOld = time;
 
+	if (status == GS_SetUp) {
+		SetUp();
+		status = GS_NewActiveBlock;
+	}
+
 	//各クラスの状態推移関数
 	pause->UpData(&status);
 	if (status != GS_Pause) {
 		effect->UpData(&status, timeNow);
 		block->UpDate(&status, timeNow);
 		field->UpData(&status, timeNow);
+		score->UpData();
 	}
 	
 	return next;
@@ -64,6 +71,7 @@ void CGame::Draw(CSceneMgr* sceneMgr) {
 	//各クラスの描画関数
 	field->Draw();
 	block->Draw();
+	score->Draw();
 	if (status == GS_VanishFieldBlocks) 
 		effect->Draw();
 	if(status == GS_Pause)	
@@ -79,3 +87,8 @@ int CGame::GetTimeNow() {
 	return timeNow;
 }
 
+//ゲームの初期設定を行う関数
+void CGame::SetUp() {
+
+	PlaySoundMem(data->GetSe_Bgm(), DX_PLAYTYPE_LOOP);
+}

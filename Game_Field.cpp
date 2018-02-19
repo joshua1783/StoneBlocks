@@ -2,13 +2,15 @@
 #include "Common.h"
 #include "Sys_Input.h"
 #include "Sys_DataLoader.h"
+#include "Game_Score.h"
 #include "Game_Field.h"
 #include "Gama_ActiveBlock.h"
 
 //CFieldのコンストラクタ
-CField::CField() : flag_Grid(false), lineUpTime(0), topDrowLineNow(0), vanishBlocks(), input(0), data(0), newLineBlocks(FIELD_WIDTH, -1) {
+CField::CField() : flag_Grid(false), count(0), chain(1), lineUpTime(0), topDrowLineNow(0), vanishBlocks(), score(0), input(0), data(0), newLineBlocks(FIELD_WIDTH, -1) {
 
 	//インスタンス取得
+	score = CScore::GetInstance();
 	input = CInput::GetInstance();
 	data  = CDataLoader::GetInstance();
 	//フィールドブロック初期化
@@ -189,7 +191,7 @@ int CField::CheckFieldBlocks() {
 			//空白ならば次へ
 			if (GetFieldBlockType(j, i) == -1)	continue;
 			//同色ブロック探索関数へ
-			CountSameBlock(j, i);
+			CountSameBlock(j, i, chain);
 		}
 	}
 
@@ -205,22 +207,27 @@ int CField::CheckFieldBlocks() {
 	//一つでも消えるブロックがあったならブロック消去状態に移行
 	//そうでなければゲームオーバーでないかをチェック
 	if (flag_Vanish == true) {
+		chain++;
 		return GS_VanishFieldBlocks;
 	}else {
+		chain = 1;
 		return GS_CheckGameOver;
 	}
 }
 
 //同じ色のブロックを数える関数
-void CField::CountSameBlock(int x, int y) {
+void CField::CountSameBlock(int x, int y, int chain) {
 
 	//探索元の色を保存
+	//スコア用に消えたライン数保存
 	int color = GetFieldBlockType(x, y);
+	int vanishLine = 0;
 	
 	//左から右にかけて同色ブロックを探索,指定数以上なら該当ブロックに消去フラグを立てる
 	int num = 0;
 	for (int i = 0; x + i < FIELD_WIDTH && color == GetFieldBlockType(x + i, y); i++, num++){}
 	if (num >= VANISH_MIN_MUN) {
+		if (num == 3) vanishLine++;
 		for (int j = 0; j < num; j++) {
 			vanishBlocks[y][x + j] = 1;
 		}
@@ -229,6 +236,7 @@ void CField::CountSameBlock(int x, int y) {
 	num = 0;
 	for (int i = 0; y + i < FIELD_HEIGHT && color == GetFieldBlockType(x, y + i); i++, num++) {}
 	if (num >= VANISH_MIN_MUN) {
+		if (num == 3) vanishLine++;
 		for (int j = 0; j < num; j++) {
 			vanishBlocks[y + j][x] = 1;
 		}
@@ -237,6 +245,7 @@ void CField::CountSameBlock(int x, int y) {
 	num = 0;
 	for (int i = 0; x + i < FIELD_WIDTH && y + i < FIELD_HEIGHT && color == GetFieldBlockType(x + i, y + i); i++, num++) {}
 	if (num >= VANISH_MIN_MUN) {
+		if (num == 3) vanishLine++;
 		for (int j = 0; j < num; j++) {
 			vanishBlocks[y + j][x + j] = 1;
 		}
@@ -245,10 +254,13 @@ void CField::CountSameBlock(int x, int y) {
 	num = 0;
 	for (int i = 0; x - i >= 0 && y + i < FIELD_HEIGHT && color == GetFieldBlockType(x - i, y + i); i++, num++) {}
 	if (num >= VANISH_MIN_MUN) {
+		if (num == 3) vanishLine++;
 		for (int j = 0; j < num; j++) {
 			vanishBlocks[y + j][x - j] = 1;
 		}
 	}
+	//スコア加算
+	score->ScoreAdd_Break(chain, vanishLine);
 }
 
 //消去フラグが経っているブロックを消す

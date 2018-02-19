@@ -3,19 +3,21 @@
 #include <iterator>
 #include "Common.h"
 #include "Game_Field.h"
+#include "Game_Score.h"
 #include "Gama_ActiveBlock.h"
 #include "Sys_Input.h"
 #include "Sys_Font.h"
 #include "Sys_DataLoader.h"
 
 //CBlockのコンストラク
-CActiveBlock::CActiveBlock(): input(0), font(0), data(0), field(0), nextBlock(), downTime(0), waitTime(0), flag_BlockStop(false){
+CActiveBlock::CActiveBlock(): input(0), font(0), data(0), field(0), score(0), nextBlock(), downTime(0), waitTime(0), flag_BlockStop(false){
 
 	//インスタンス取得
 	input = CInput::GetInstance();
 	font = CFontHandle::GetInstance();
 	data = CDataLoader::GetInstance();
 	field = CField::GetInstance();
+	score = CScore::GetInstance();
 	//アクティブブロック初期化
 	activeBlock = vector<vector<short>>(ACTIVEBLOCK_HEIGHT, vector<short>(ACTIVEBLOCK_WIDTH, -1));
 	MakeNewBlock();
@@ -133,13 +135,17 @@ void CActiveBlock::MoveBlock(int timeNow) {
 		movePos.y = 1;
 		downTime = 0;
 		flag_BlockStop = true;
+		//スコア加算
+		score->ScoreAdd_Move();
 	}else if (downTime >= DOWN_TIME_NUM) {
 		movePos.y = 1;
 		downTime = 0;
 	}
+
 	//移動先に壁や他のブロックがなければ移動量を加算
 	pos.x = CheckHitBlock_X(movePos.x) ? pos.x : pos.x + movePos.x;
 	pos.y = CheckHitBlock_Y()		   ? pos.y : pos.y + movePos.y;
+
 	//ブロックが下に落ちれないときにした入力があった場合即固定
 	//そうでなければ固定猶予時間を加算
 	if (CheckHitBlock_Y() && flag_BlockStop == true) {
@@ -151,7 +157,6 @@ void CActiveBlock::MoveBlock(int timeNow) {
 
 //アクティブブロックの色の順番を変える関数
 void CActiveBlock::ChangeBlock() {
-
 	iter_swap(activeBlock[0].begin(),activeBlock[ACTIVEBLOCK_HEIGHT - 1].begin());
 }
 

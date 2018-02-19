@@ -11,6 +11,7 @@
 
 using namespace std;
 
+class CScore;
 class CInput;
 class CDataLoader;
 
@@ -26,10 +27,12 @@ public:
 	int GetVanishBlock(int, int);
 	void Active2FieldBlock(int, int, short);
 private:
+	CScore * score;
 	CInput * input;
 	CDataLoader * data;
 	bool flag_Grid;	//グリッド線の描画フラグ
 	int count;
+	int chain;
 	int lineUpTime;
 	unsigned int topDrowLineNow;
 	int vanishBlocks[FIELD_HEIGHT][FIELD_WIDTH];
@@ -39,7 +42,7 @@ private:
 	void MakeNewLine();
 	void LineUp();
 	int CheckFieldBlocks();
-	void CountSameBlock(int, int);
+	void CountSameBlock(int, int, int);
 	void VanishFieldBlocks();
 	int FallBlocks();
 	int CheckGameOver();
