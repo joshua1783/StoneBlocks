@@ -18,10 +18,6 @@ CField::CField() : flag_Grid(false), lineUpTime(0), topDrowLineNow(0), vanishBlo
 	MakeNewLine();
 }
 
-//CFieldのデストラクタ
-CField::~CField(){
-}
-
 //CFieldのインスタンスのポインタを返す関数
 CField* CField::GetInstance() {
 
@@ -59,6 +55,7 @@ void CField::UpData(int* status,int timeNow) {
 		if (count >= VANISH_TIME_NUM) {
 			count = 0;
 			//消去フラグの立っているブロックを消去
+			//その後空中ブロック落下状態に移行
 			VanishFieldBlocks();
 			*status = GS_FallBlocks;
 		}
@@ -69,12 +66,14 @@ void CField::UpData(int* status,int timeNow) {
 		if (count >= FALL_TIME_NUM) {
 			count = 0;
 			//空中に浮いたブロックの落下
-			//浮いたブロックの有無で次の状態変化
+			//浮いたブロックの有無で次の状態移行
 			*status = FallBlocks();
 		}
 	}
-	//
+	//ゲームオーバーチェック時
 	else if (*status == GS_CheckGameOver) {
+		//フィールドブロックがゲームオーバー位置に到達していないかチェック
+		//チェック結果で次の状態移行
 		*status = CheckGameOver();
 	}
 }
@@ -86,6 +85,7 @@ void CField::Draw() {
 	DrawBox(MARGIN_WIDTH, MARGIN_HEIGHT, FIELD_WIDTH * BLOCK_SIZE + MARGIN_WIDTH, FIELD_HEIGHT * BLOCK_SIZE + MARGIN_HEIGHT, CR_Black, TRUE);
 	DrawBox(MARGIN_WIDTH, MARGIN_HEIGHT + FIELD_HEIGHT * BLOCK_SIZE + 10, FIELD_WIDTH * BLOCK_SIZE + MARGIN_WIDTH, BLOCK_SIZE + MARGIN_HEIGHT + FIELD_HEIGHT * BLOCK_SIZE + 10, CR_Black, TRUE);
 	DrawGraph(BLOCK_SIZE * 4 + MARGIN_WIDTH, MARGIN_HEIGHT, data->GetImg_EndIcon(), TRUE);
+	
 	//flag_Gridがtrueならばグリッド線描画
 	if (flag_Grid == true) {
 		for (int i = 1; i < FIELD_HEIGHT; i++) {
@@ -95,6 +95,7 @@ void CField::Draw() {
 			DrawLine(BLOCK_SIZE * j + MARGIN_WIDTH, MARGIN_HEIGHT, BLOCK_SIZE * j + MARGIN_WIDTH, FIELD_HEIGHT * BLOCK_SIZE + MARGIN_HEIGHT, CR_White);
 		}
 	}
+
 	//各要素に対応した色のブロック描画
 	for (int i = 0; i < FIELD_HEIGHT; i++){
 		for (int j = 0; j < FIELD_WIDTH; j++){
@@ -148,13 +149,11 @@ int CField::GetVanishBlock(int x, int y) {
 
 //落下したアクティブブロックをフィールドブロックに変更する関数
 void CField::Active2FieldBlock(int x, int y, short blockType) {
-
 	fieldBlocks[y + topDrowLineNow][x] = blockType;
 }
 
 //次に出現するラインのブロックを作成する関数
-void CField::MakeNewLine() {
-		
+void CField::MakeNewLine() {		
 	for (int i = 0; i < FIELD_WIDTH; i++) {
 		newLineBlocks[i] = GetRand(BlockType_Num - 1);
 	}
@@ -194,7 +193,7 @@ int CField::CheckFieldBlocks() {
 		}
 	}
 
-	//消去フラグが立っているブロックがあれば
+	//消去フラグが立っているブロックがあればフラグを立てる
 	for (int i = 0; i < FIELD_HEIGHT; i++) {
 		for (int j = 0; j < FIELD_WIDTH; j++) {
 			if (vanishBlocks[i][j] == 1) {
@@ -203,12 +202,11 @@ int CField::CheckFieldBlocks() {
 		}
 	}
 
-	//一つでも消えるブロックがあったならGS_VanishFieldBlocksに移動
-	//そうでなければ次のアクティブブロックを生成
+	//一つでも消えるブロックがあったならブロック消去状態に移行
+	//そうでなければゲームオーバーでないかをチェック
 	if (flag_Vanish == true) {
 		return GS_VanishFieldBlocks;
-	}
-	else {
+	}else {
 		return GS_CheckGameOver;
 	}
 }
@@ -300,8 +298,10 @@ int CField::FallBlocks() {
 	}
 }
 
+//フィールドブロックがゲームオーバー位置に到達しているかチェックする関数
 int CField::CheckGameOver() {
 
+	//ゲームオーバー位置が空白でなければゲームオーバー
 	if (GetFieldBlockType(FIELD_WIDTH / 2, 0) != -1) {
 
 		if (count < FIELD_HEIGHT) {
@@ -314,7 +314,7 @@ int CField::CheckGameOver() {
 
 		return GS_CheckGameOver;		
 	}
-
+	//空白ならば次のアクティブブロック生成
 	count = 0;
 
 	return GS_NewActiveBlock;

@@ -19,7 +19,7 @@
 	LoadParcent();\
 }
 
-#define MATERIAL_NUM 11.0	//‘fŞ‘”
+#define MATERIAL_NUM 16.0	//‘fŞ‘”
 
 class CSystem;
 class CSceneMgr;
@@ -29,7 +29,7 @@ class CDataLoader
 {
 public:
 	CDataLoader();
-	~CDataLoader() {};
+	~CDataLoader();
 	static CDataLoader* GetInstance();
 	void Load();
 	int GetImg_Background_Game() const;
@@ -46,8 +46,10 @@ public:
 	int GetSe_Break() const;
 	int GetSe_Move() const;
 	int GetSe_Bgm() const;
+	int GetSe_Select() const;
+	int GetSe_Enter() const;
 private:
-	CFontHandle * font;
+	CFontHandle * font;	
 	int loadCount;	//ƒ[ƒh‚µ‚½‘fŞ”
 	//ˆÈ‰ºAŠe‘fŞƒnƒ“ƒhƒ‹Ši”[—p‚Ì•Ï”
 	int img_Background_Game;
@@ -64,6 +66,8 @@ private:
 	int se_Break;
 	int se_Move;
 	int se_Bgm;
+	int se_Select;
+	int se_Enter;
 
 	void LoadParcent();
 };

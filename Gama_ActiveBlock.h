@@ -24,7 +24,7 @@ class CActiveBlock
 {
 public:
 	CActiveBlock();
-	~CActiveBlock();
+	~CActiveBlock(){};
 	static CActiveBlock* GetInstance();
 	void UpDate(int*, int);
 	void Draw();

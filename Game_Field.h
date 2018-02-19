@@ -4,10 +4,10 @@
 #include <vector>
 
 #define VECTOR_CAPACITY_NUM	10000	//あらかじめ確保しておく可変長配列の要素数
-#define VANISH_MIN_MUN 3			//同色がつながっていた時に消えるための最小数
-#define LINEUP_TIME_NUM 10000		//自動でラインが上がるまでの猶予時間(mS)
-#define VANISH_TIME_NUM 1400			//フィールドブロックが消失するまでの猶予時間(mS)		
-#define FALL_TIME_NUM 500			//浮いたブロックが1マス落ちるまでの猶予時間(mS)
+#define VANISH_MIN_MUN		3		//同色がつながっていた時に消えるための最小数
+#define LINEUP_TIME_NUM		10000	//自動でラインが上がるまでの猶予時間(mS)
+#define VANISH_TIME_NUM		1400	//フィールドブロックが消失するまでの猶予時間(mS)		
+#define FALL_TIME_NUM		500		//浮いたブロックが1マス落ちるまでの猶予時間(mS)
 
 using namespace std;
 
@@ -18,7 +18,7 @@ class CField
 {
 public:
 	CField();
-	~CField();
+	~CField(){};
 	static CField* GetInstance();
 	void UpData(int*, int);
 	void Draw();

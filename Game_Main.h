@@ -1,7 +1,6 @@
 #ifndef GAME_MAIN_H
 #define GAME_MAIN_H
 
-class CInput;
 class CField;
 class CActiveBlock;
 class CEffect;
@@ -19,7 +18,6 @@ public:
 	void Draw(CSceneMgr* sceneMgr);
 	int GetTimeNow();
 private:
-	CInput * input;
 	CField* field;
 	CActiveBlock* block;
 	CEffect* effect;

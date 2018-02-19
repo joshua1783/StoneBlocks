@@ -22,10 +22,6 @@ CActiveBlock::CActiveBlock(): input(0), font(0), data(0), field(0), nextBlock(),
 	
 }
 
-//CBllockのデストラクタ
-CActiveBlock::~CActiveBlock(){
-}
-
 //CBlockのインスタンスのポインタを返す関数
 CActiveBlock* CActiveBlock::GetInstance() {
 

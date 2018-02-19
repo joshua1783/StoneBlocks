@@ -6,15 +6,13 @@
 #include "Gama_ActiveBlock.h"
 #include "Game_Effect.h"
 #include "Game_Pause.h"
-#include "Sys_Input.h"
 #include "Sys_Font.h"
 #include "Sys_DataLoader.h"
 
 //CGameのコンストラクタ
-CGame::CGame(): input(0), field(0), block(0), effect(0), pause(0), data(0), timeNow(0), timeOld(GetNowCount()){
+CGame::CGame(): field(0), block(0), effect(0), pause(0), data(0), timeNow(0), timeOld(GetNowCount()){
 
 	//インスタンス取得
-	input = CInput::GetInstance();
 	field = CField::GetInstance();
 	block = CActiveBlock::GetInstance();
 	effect = CEffect::GetInstance();
@@ -24,8 +22,7 @@ CGame::CGame(): input(0), field(0), block(0), effect(0), pause(0), data(0), time
 
 	//ステータス初期化
 	status = GS_NewActiveBlock;
-	//素材読み込み
-	data->Load();
+
 	PlaySoundMem(data->GetSe_Bgm(), DX_PLAYTYPE_LOOP);
 }
 
@@ -34,6 +31,7 @@ CGame::~CGame(){
 	delete block;
 	delete field;
 	delete effect;
+	delete pause;
 }
 
 //ゲームシーンの状態推移関数
@@ -61,12 +59,15 @@ CSceneBase* CGame::Updata(CSceneMgr* sceneMgr) {
 //ゲームシーン全体の描画関数
 void CGame::Draw(CSceneMgr* sceneMgr) {
 
+	//背景描画
 	DrawGraph(0, 0, data->GetImg_Background_Game(), FALSE);
 	//各クラスの描画関数
 	field->Draw();
 	block->Draw();
-	if (status == GS_VanishFieldBlocks) effect->Draw();
-	if(status == GS_Pause)	pause->Draw();
+	if (status == GS_VanishFieldBlocks) 
+		effect->Draw();
+	if(status == GS_Pause)	
+		pause->Draw();
 
 	if (status == GS_GameOver) {
 		DrawGraph(10, BLOCK_SIZE * 5 + MARGIN_HEIGHT, data->GetImg_GameOver(), TRUE);

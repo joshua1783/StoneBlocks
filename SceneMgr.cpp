@@ -20,9 +20,9 @@ CSceneMgr::~CSceneMgr(){
 CSceneMgr* CSceneMgr::GetInstance() {
 
 	//インスタンス作成
-	static CSceneMgr instance;
+	static CSceneMgr* instance = new CSceneMgr;
 
-	return &instance;
+	return instance;
 }
 
 //シーンの状態推移関数を呼び出す関数

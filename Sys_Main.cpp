@@ -1,7 +1,9 @@
 #include <Windows.h>
 #include <DxLib.h>
 #include "Common.h"
+#include "Sys_Font.h"
 #include "Sys_Input.h"
+#include "Sys_DataLoader.h"
 #include "SceneMgr.h"
 
 
@@ -20,6 +22,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//インスタンス取得
 	CInput* input = CInput::GetInstance();
 	CSceneMgr* scene = CSceneMgr::GetInstance();
+	CDataLoader* data = CDataLoader::GetInstance();
+	
+	//素材読み込み
+	data->Load();
 
 	//メインループ
 	while (ProcessMessage() == 0 &&
@@ -33,8 +39,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		//画面反映
 		ScreenFlip();
-
 	}
+
+	//メモリー開放
+	delete input;
+	delete scene;
+	delete data;
 	
 	//Dxライブラリ終了処理
 	DxLib_End();

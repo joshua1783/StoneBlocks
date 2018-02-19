@@ -11,6 +11,15 @@ CDataLoader::CDataLoader():font(0), loadCount(0){
 	font = CFontHandle::GetInstance();
 }
 
+//CDataLoaderのコンストラクタ
+CDataLoader::~CDataLoader(){
+
+	//読み込んだ全ての素材データを消去
+	InitGraph();
+	InitSoundMem();
+}
+
+
 //CDataLoaderのインスタンスのポインタを返す関数
 CDataLoader* CDataLoader::GetInstance() {
 
@@ -55,6 +64,8 @@ void CDataLoader::Load() {
 		SoundLoad(se_Break, 80, "se/Break.wav");
 		SoundLoad(se_Move, 50, "se/Move.wav");
 		SoundLoad(se_Bgm, 70, "se/BGM.wav");
+		SoundLoad(se_Select, 60, "se/Select.wav");
+		SoundLoad(se_Enter, 60, "se/Enter.wav");
 		
 	}
 	catch (const char* msg) {
@@ -115,4 +126,10 @@ int CDataLoader::GetSe_Move() const {
 }
 int CDataLoader::GetSe_Bgm() const {
 	return se_Bgm;
+}
+int CDataLoader::GetSe_Select() const {
+	return se_Select;
+}
+int CDataLoader::GetSe_Enter() const {
+	return se_Enter;
 }
