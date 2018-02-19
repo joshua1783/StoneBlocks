@@ -6,14 +6,12 @@
 #include "Sys_DataLoader.h"
 
 //CPauseのコンストラク
-CPause::CPause(): input(0), font(0), data(0), saveStatus(0){
+CPause::CPause(): input(0), font(0), data(0){
 
 	//インスタンス取得
 	input = CInput::GetInstance();
 	font = CFontHandle::GetInstance();
 	data = CDataLoader::GetInstance();
-	//選択メニューの初期化
-	selectNow = PM_ReturnGame;
 }
 
 
@@ -58,6 +56,12 @@ void CPause::Draw() {
 	SetDrawBright(150, 150, 150);
 }
 
+//ゲーム開始時の初期化を行う関数
+void CPause::SetUp() {
+	saveStatus = 0;				//保存状態の初期化
+	selectNow = PM_ReturnGame;	//選択メニューの初期化
+}
+
 //ポーズ中のメニュー選択をする関数
 int CPause::PauseNow() {
 
@@ -90,8 +94,8 @@ int CPause::PauseNow() {
 		}
 		//「タイトルに戻る」ならばタイトル状態に移行
 		else if (selectNow == PM_ReturnTitle) {
-			SetDrawBright(10, 10, 10);
-			return saveStatus;
+			SetDrawBright(255, 255, 255);
+			return GS_SetUp;
 		}
 	}
 

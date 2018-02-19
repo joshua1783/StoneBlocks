@@ -69,3 +69,9 @@ void CEffect::Draw() {
 		}
 	}
 }
+
+//ゲーム開始時の初期化を行う関数
+void CEffect::SetUp() {
+	count = 0;	//汎用変数の初期化
+	num = 0;	//現在フレーム数初期化
+}

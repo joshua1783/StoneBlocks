@@ -7,17 +7,14 @@
 #include "Gama_ActiveBlock.h"
 
 //CFieldのコンストラクタ
-CField::CField() : flag_Grid(false), count(0), chain(1), lineUpTime(0), topDrowLineNow(0), vanishBlocks(), score(0), input(0), data(0), newLineBlocks(FIELD_WIDTH, -1) {
+CField::CField() :vanishBlocks(), score(0), input(0), data(0), newLineBlocks(FIELD_WIDTH, -1) {
 
 	//インスタンス取得
 	score = CScore::GetInstance();
 	input = CInput::GetInstance();
 	data  = CDataLoader::GetInstance();
-	//フィールドブロック初期化
+	//フィールドブロック用のメモリをあらかじめ確保
 	fieldBlocks.reserve(VECTOR_CAPACITY_NUM);
-	fieldBlocks = vector<vector<short>>(FIELD_HEIGHT, vector<short>(FIELD_WIDTH, -1));
-	//次のライン生成
-	MakeNewLine();
 }
 
 //CFieldのインスタンスのポインタを返す関数
@@ -31,7 +28,7 @@ CField* CField::GetInstance() {
 
 //フィールド関係の状態推移関数
 void CField::UpData(int* status,int timeNow) {
-		
+	
 	//Tabキーが押されたらグリッド線表示のフラグ反転
 	if (input->CheckKey(KEY_INPUT_TAB) == 1)
 		flag_Grid = !flag_Grid;
@@ -102,7 +99,7 @@ void CField::Draw() {
 	for (int i = 0; i < FIELD_HEIGHT; i++){
 		for (int j = 0; j < FIELD_WIDTH; j++){
 			//フィールドのブロック描画
-			switch (fieldBlocks[i + topDrowLineNow][j]){
+			switch (fieldBlocks[i + topDrawLineNow][j]){
 				case BlockType_Red:
 					DrawGraph(BLOCK_SIZE * j + MARGIN_WIDTH, BLOCK_SIZE * i + MARGIN_HEIGHT, data->GetImg_BlockRed(), TRUE);
 					break;
@@ -139,9 +136,27 @@ void CField::Draw() {
 	}
 }
 
+//ゲーム開始時の初期化を行う関数
+void CField::SetUp() {
+	flag_Grid = false;	//グリッド線描画フラグ初期化
+	count = 0;			//汎用変数初期化
+	chain = 1;			//連鎖数初期化
+	lineUpTime = 0;		//ライン上昇時間初期化
+	topDrawLineNow = 0; //描画上限ライン初期化
+
+	//フィールドブロックの長さが規定より長い場合は,規定以上の要素は削除
+	//フィールドブロックの中身を空白で初期化
+	if (fieldBlocks.size() > FIELD_HEIGHT) {
+		fieldBlocks.erase(fieldBlocks.begin() + FIELD_HEIGHT, fieldBlocks.end());
+	}
+	fieldBlocks = vector<vector<short>>(FIELD_HEIGHT, vector<short>(FIELD_WIDTH, -1));
+	//次のライン生成
+	MakeNewLine();
+}
+
 //引数座標のフィールド上ブロックの種類を返す関数
 int CField::GetFieldBlockType(int x, int y) {
-	return fieldBlocks[y + topDrowLineNow][x];
+	return fieldBlocks[y + topDrawLineNow][x];
 }
 
 //引数座標のブロックが消える予定かどうかを返す関数
@@ -151,7 +166,7 @@ int CField::GetVanishBlock(int x, int y) {
 
 //落下したアクティブブロックをフィールドブロックに変更する関数
 void CField::Active2FieldBlock(int x, int y, short blockType) {
-	fieldBlocks[y + topDrowLineNow][x] = blockType;
+	fieldBlocks[y + topDrawLineNow][x] = blockType;
 }
 
 //次に出現するラインのブロックを作成する関数
@@ -168,7 +183,7 @@ void CField::LineUp() {
 	//フィールドブロックの現在の描画する最大ラインをずらす
 	//次の新しいラインブロックを作成
 	fieldBlocks.emplace_back(newLineBlocks);
-	topDrowLineNow++;
+	topDrawLineNow++;
 	MakeNewLine();
 }
 
@@ -270,7 +285,7 @@ void CField::VanishFieldBlocks() {
 	for (int i = 0; i < FIELD_HEIGHT; i++) {
 		for (int j = 0; j < FIELD_WIDTH; j++) {
 			if (vanishBlocks[i][j] == 1) {
-				fieldBlocks[i + topDrowLineNow][j] = -1;
+				fieldBlocks[i + topDrawLineNow][j] = -1;
 			}
 		}
 	}
@@ -293,7 +308,7 @@ int CField::FallBlocks() {
 				//ここまできたならば何かしらのブロック有
 				//ブロックを1マス落とす
 				flag_Fall = true;
-				for (line = i + topDrowLineNow; line >= 0; line--){
+				for (line = i + topDrawLineNow; line >= 0; line--){
 					if (line - 1 >= 0) 
 						fieldBlocks[line][j] = fieldBlocks[line - 1][j];
 				}

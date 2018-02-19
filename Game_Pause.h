@@ -20,6 +20,7 @@ public:
 	static CPause* GetInstance();
 	void UpData(int*);
 	void Draw();
+	void SetUp();
 private:
 	CInput * input;		//入力関係のインスタンス保存用ポインタ
 	CFontHandle* font;	//フォント関係のインスタンス保存用ポインタ

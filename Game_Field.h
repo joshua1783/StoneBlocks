@@ -23,6 +23,7 @@ public:
 	static CField* GetInstance();
 	void UpData(int*, int);
 	void Draw();
+	void SetUp();
 	int GetFieldBlockType(int, int);
 	int GetVanishBlock(int, int);
 	void Active2FieldBlock(int, int, short);
@@ -34,7 +35,7 @@ private:
 	int count;
 	int chain;
 	int lineUpTime;
-	unsigned int topDrowLineNow;
+	unsigned int topDrawLineNow;
 	int vanishBlocks[FIELD_HEIGHT][FIELD_WIDTH];
 	vector<short> newLineBlocks;
 	vector<vector<short>> fieldBlocks;

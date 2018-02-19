@@ -16,6 +16,7 @@ public:
 	static CEffect* GetInstance();
 	void UpData(int*, int);
 	void Draw();
+	void SetUp();
 private:
 	CField * field;		//フィールドブロック関係のインスタンス保存用ポインタ
 	CDataLoader* data;	//素材関係のインスタンス保存用ポインタ

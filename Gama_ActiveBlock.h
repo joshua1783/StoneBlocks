@@ -29,6 +29,7 @@ public:
 	static CActiveBlock* GetInstance();
 	void UpDate(int*, int);
 	void Draw();
+	void SetUp();
 private:
 	CInput * input;
 	CFontHandle* font;

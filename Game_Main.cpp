@@ -89,6 +89,10 @@ int CGame::GetTimeNow() {
 
 //ƒQ[ƒ€‚Ì‰ŠúÝ’è‚ðs‚¤ŠÖ”
 void CGame::SetUp() {
-
+	block->SetUp();
+	field->SetUp();
+	effect->SetUp();
+	pause->SetUp();
+	score->SetUp();
 	PlaySoundMem(data->GetSe_Bgm(), DX_PLAYTYPE_LOOP);
 }

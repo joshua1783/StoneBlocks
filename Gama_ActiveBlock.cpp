@@ -10,7 +10,7 @@
 #include "Sys_DataLoader.h"
 
 //CBlockのコンストラク
-CActiveBlock::CActiveBlock(): input(0), font(0), data(0), field(0), score(0), nextBlock(), downTime(0), waitTime(0), flag_BlockStop(false){
+CActiveBlock::CActiveBlock(): input(0), font(0), data(0), field(0), score(0), nextBlock(){
 
 	//インスタンス取得
 	input = CInput::GetInstance();
@@ -18,9 +18,8 @@ CActiveBlock::CActiveBlock(): input(0), font(0), data(0), field(0), score(0), ne
 	data = CDataLoader::GetInstance();
 	field = CField::GetInstance();
 	score = CScore::GetInstance();
-	//アクティブブロック初期化
-	activeBlock = vector<vector<short>>(ACTIVEBLOCK_HEIGHT, vector<short>(ACTIVEBLOCK_WIDTH, -1));
-	MakeNewBlock();
+	
+	
 	
 }
 
@@ -109,6 +108,17 @@ void CActiveBlock::Draw() {
 		}
 	}
 }
+
+//ゲーム開始時の初期化を行う関数
+void CActiveBlock::SetUp() {
+	downTime = 0;			//落下猶予時間初期化
+	waitTime = 0;			//固定猶予時間初期化
+	flag_BlockStop = false;	//ブロック停止フラグ初期化
+	//アクティブブロック初期化
+	activeBlock = vector<vector<short>>(ACTIVEBLOCK_HEIGHT, vector<short>(ACTIVEBLOCK_WIDTH, -1));
+	MakeNewBlock();
+}
+
 //アクティブブロック移動関係の関数
 void CActiveBlock::MoveBlock(int timeNow) {
 	
