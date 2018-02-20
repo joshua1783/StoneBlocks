@@ -3,6 +3,7 @@
 #include "Common.h"
 #include "Sys_Font.h"
 #include "Sys_Input.h"
+#include "Sys_Fade.h"
 #include "Sys_DataLoader.h"
 #include "SceneMgr.h"
 
@@ -21,6 +22,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	//インスタンス取得
 	CInput* input = CInput::GetInstance();
+	CFade* fade = CFade::GetInstance();
 	CSceneMgr* scene = CSceneMgr::GetInstance();
 	CFontHandle* font = CFontHandle::GetInstance();
 	CDataLoader* data = CDataLoader::GetInstance();
@@ -35,8 +37,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		   input->CheckKey(KEY_INPUT_ESCAPE) == 0){
 
 		scene->SceneUpdata();
+		fade->UpData();
 
+		//ブレンドモードなしに設定
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+		
 		scene->SceneDraw();
+		fade->Draw();
 
 		//画面反映
 		ScreenFlip();

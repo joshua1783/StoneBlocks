@@ -143,9 +143,11 @@
     <ClCompile Include="Game_Score.cpp" />
     <ClCompile Include="SceneMgr.cpp" />
     <ClCompile Include="Sys_DataLoader.cpp" />
+    <ClCompile Include="Sys_Fade.cpp" />
     <ClCompile Include="Sys_Font.cpp" />
     <ClCompile Include="Sys_Input.cpp" />
     <ClCompile Include="Sys_Main.cpp" />
+    <ClCompile Include="Title.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h" />
@@ -158,8 +160,10 @@
     <ClInclude Include="SceneBase.h" />
     <ClInclude Include="SceneMgr.h" />
     <ClInclude Include="Sys_DataLoader.h" />
+    <ClInclude Include="Sys_Fade.h" />
     <ClInclude Include="Sys_Font.h" />
     <ClInclude Include="Sys_Input.h" />
+    <ClInclude Include="Title.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -19,7 +19,7 @@
 	LoadParcent();\
 }
 
-#define MATERIAL_NUM 16.0	//‘fŞ‘”
+#define MATERIAL_NUM 17.0	//‘fŞ‘”
 
 class CSystem;
 class CSceneMgr;
@@ -33,6 +33,7 @@ public:
 	static CDataLoader* GetInstance();
 	void Load();
 	int GetImg_Background_Game() const;
+	int GetImg_TitleLogo() const;
 	int GetImg_BlockRed() const;
 	int GetImg_BlockBlue() const;
 	int GetImg_BlockGreen() const;
@@ -53,6 +54,7 @@ private:
 	int loadCount;	//ƒ[ƒh‚µ‚½‘fŞ”
 	//ˆÈ‰ºAŠe‘fŞƒnƒ“ƒhƒ‹Ši”[—p‚Ì•Ï”
 	int img_Background_Game;
+	int img_TitleLogo;
 	int img_BlockRed;
 	int img_BlockBlue;
 	int img_BlockGreen;

@@ -27,6 +27,7 @@ enum BlockType {
 
 enum GameStatus {
 	GS_SetUp,
+	GS_FadeIn,
 	GS_NewActiveBlock,
 	GS_ActiveBlockMove,
 	GS_CheckFieldBlocks,
@@ -35,6 +36,7 @@ enum GameStatus {
 	GS_CheckGameOver,
 	GS_GameOver,
 	GS_Pause,
+	GS_ReturnTitle,
 };
 
 #endif // !COMMON_H

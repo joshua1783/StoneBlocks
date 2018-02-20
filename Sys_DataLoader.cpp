@@ -35,6 +35,7 @@ void CDataLoader::Load() {
 	try {
 		//画像
 		ImgLoad(img_Background_Game, "img/Background_Game.png");
+		ImgLoad(img_TitleLogo, "img/TitleLogo.png");
 		ImgLoad(img_BlockRed, "img/Block_Red.png");
 		ImgLoad(img_BlockBlue, "img/Block_Blue.png");
 		ImgLoad(img_BlockGreen, "img/Block_Green.png");
@@ -63,7 +64,7 @@ void CDataLoader::Load() {
 		//効果音
 		SoundLoad(se_Break, 80, "se/Break.wav");
 		SoundLoad(se_Move, 50, "se/Move.wav");
-		SoundLoad(se_Bgm, 70, "se/BGM.wav");
+		SoundLoad(se_Bgm, 60, "se/BGM.wav");
 		SoundLoad(se_Select, 60, "se/Select.wav");
 		SoundLoad(se_Enter, 60, "se/Enter.wav");
 		
@@ -87,6 +88,9 @@ void CDataLoader::LoadParcent() {
 //以下、各素材ハンドルを返す関数
 int CDataLoader::GetImg_Background_Game() const {
 	return img_Background_Game;
+}
+int CDataLoader::GetImg_TitleLogo() const {
+	return img_TitleLogo;
 }
 int CDataLoader::GetImg_BlockRed() const {
 	return img_BlockRed;

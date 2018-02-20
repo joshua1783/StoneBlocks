@@ -2,6 +2,7 @@
 #define GAME_MAIN_H
 
 class CFontHandle;
+class CFade;
 class CDataLoader;
 class CEffect;
 class CPause;
@@ -14,12 +15,13 @@ class CGame : public CSceneBase
 {
 public:
 	CGame();
-	~CGame();
+	~CGame(){};
 	CSceneBase* Updata(CSceneMgr* sceneMgr);
 	void Draw(CSceneMgr* sceneMgr);
 	int GetTimeNow();
 private:
 	CFontHandle * font;
+	CFade* fade;
 	CDataLoader * data;
 	CEffect* effect;
 	CPause* pause;

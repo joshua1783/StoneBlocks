@@ -24,6 +24,7 @@ public:
 private:
 	CInput * input;		//入力関係のインスタンス保存用ポインタ
 	CFontHandle* font;	//フォント関係のインスタンス保存用ポインタ
+	CFade* fade;		//フェード関係の運スタンス保存用ポインタ
 	CDataLoader* data;	//素材関係のインスタンス保存用ポインタ
 	int saveStatus;		//中断したゲーム状態保存変数
 	int selectNow;		//選択中メニュー

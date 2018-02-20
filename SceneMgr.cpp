@@ -1,12 +1,12 @@
 #include "SceneBase.h"
 #include "SceneMgr.h"
-#include "Game_Main.h"
+#include "Title.h"
 
 //CSceneMgrのコンストラクタ
 CSceneMgr::CSceneMgr(){
 
 	//開始シーンの設定
-	sceneNow = new CGame;
+	sceneNow = new CTitle;
 }
 
 //CSceneMgrのデストラクタ
@@ -35,6 +35,7 @@ void CSceneMgr::SceneUpdata() {
 	if (sceneNext != sceneNow) {
 		delete sceneNow;
 		sceneNow = sceneNext;
+		sceneNext = sceneNow->Updata(this);
 	}
 }
 

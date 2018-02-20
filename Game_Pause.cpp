@@ -2,15 +2,17 @@
 #include "Common.h"
 #include "Sys_Input.h"
 #include "Sys_Font.h"
+#include "Sys_Fade.h"
 #include "Sys_DataLoader.h"
 #include "Game_Pause.h"
 
 //CPauseのコンストラク
-CPause::CPause(): input(0), font(0), data(0){
+CPause::CPause(): input(0), font(0), fade(0), data(0){
 
 	//インスタンス取得
 	input = CInput::GetInstance();
 	font = CFontHandle::GetInstance();
+	fade = CFade::GetInstance();
 	data = CDataLoader::GetInstance();
 }
 
@@ -94,8 +96,9 @@ int CPause::PauseNow() {
 		}
 		//「タイトルに戻る」ならばタイトル状態に移行
 		else if (selectNow == PM_ReturnTitle) {
-			SetDrawBright(255, 255, 255);
-			return GS_SetUp;
+			StopSoundMem(data->GetSe_Bgm());
+			fade->FadeOut();
+			return GS_ReturnTitle;
 		}
 	}
 

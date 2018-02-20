@@ -2,6 +2,7 @@
 #include "Common.h"
 #include "SceneBase.h"
 #include "Sys_Font.h"
+#include "Sys_Fade.h"
 #include "Sys_DataLoader.h"
 #include "Game_Main.h"
 #include "Game_Effect.h"
@@ -9,12 +10,14 @@
 #include "Game_Score.h"
 #include "Game_Field.h"
 #include "Gama_ActiveBlock.h"
+#include "Title.h"
 
 //CGameのコンストラクタ
-CGame::CGame(): field(0), block(0), effect(0), pause(0), score(0), data(0), timeNow(0), timeOld(GetNowCount()){
+CGame::CGame(): fade(0), field(0), block(0), effect(0), pause(0), score(0), data(0), timeNow(0), timeOld(GetNowCount()){
 
 	//インスタンス取得
 	font = CFontHandle::GetInstance();
+	fade = CFade::GetInstance();
 	data = CDataLoader::GetInstance();
 	effect = CEffect::GetInstance();
 	pause = CPause::GetInstance();
@@ -24,15 +27,6 @@ CGame::CGame(): field(0), block(0), effect(0), pause(0), score(0), data(0), time
 
 	//ステータス初期化
 	status = GS_SetUp;
-}
-
-//CGameのデストラクタ
-CGame::~CGame(){
-	delete block;
-	delete field;
-	delete score;
-	delete pause;
-	delete effect;
 }
 
 //ゲームシーンの状態推移関数
@@ -48,18 +42,32 @@ CSceneBase* CGame::Updata(CSceneMgr* sceneMgr) {
 
 	if (status == GS_SetUp) {
 		SetUp();
-		status = GS_NewActiveBlock;
+	}
+	else if (status == GS_FadeIn) {
+		if (fade->CheckFade() == false) {
+			//BGM再生
+			PlaySoundMem(data->GetSe_Bgm(), DX_PLAYTYPE_LOOP);
+			status = GS_ActiveBlockMove;
+		}
 	}
 
 	//各クラスの状態推移関数
-	pause->UpData(&status);
-	if (status != GS_Pause) {
-		effect->UpData(&status, timeNow);
-		block->UpDate(&status, timeNow);
-		field->UpData(&status, timeNow);
-		score->UpData();
+	if (status != GS_SetUp || status != GS_FadeIn || status != GS_ReturnTitle) {
+		pause->UpData(&status);
+		if (status != GS_Pause) {
+			effect->UpData(&status, timeNow);
+			block->UpDate(&status, timeNow);
+			field->UpData(&status, timeNow);
+			score->UpData();
+		}
 	}
-	
+
+	//フェードアウトが終了したらタイトルシーンに移行
+	if (status == GS_ReturnTitle) {
+		if(fade->CheckFade() == false)
+			next = new CTitle;
+	}
+
 	return next;
 }
 
@@ -72,7 +80,7 @@ void CGame::Draw(CSceneMgr* sceneMgr) {
 	field->Draw();
 	block->Draw();
 	score->Draw();
-	if (status == GS_VanishFieldBlocks) 
+	if (status == GS_VanishFieldBlocks || status == GS_Pause) 
 		effect->Draw();
 	if(status == GS_Pause)	
 		pause->Draw();
@@ -89,10 +97,13 @@ int CGame::GetTimeNow() {
 
 //ゲームの初期設定を行う関数
 void CGame::SetUp() {
+	//各種初期設定
 	block->SetUp();
 	field->SetUp();
 	effect->SetUp();
 	pause->SetUp();
 	score->SetUp();
-	PlaySoundMem(data->GetSe_Bgm(), DX_PLAYTYPE_LOOP);
+	fade->FadeIn();
+	//フェードイン状態に移行
+	status = GS_FadeIn;
 }
