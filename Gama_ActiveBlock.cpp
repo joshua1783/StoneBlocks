@@ -2,12 +2,12 @@
 #include <vector>
 #include <iterator>
 #include "Common.h"
-#include "Game_Field.h"
-#include "Game_Score.h"
-#include "Gama_ActiveBlock.h"
 #include "Sys_Input.h"
 #include "Sys_Font.h"
 #include "Sys_DataLoader.h"
+#include "Game_Score.h"
+#include "Game_Field.h"
+#include "Gama_ActiveBlock.h"
 
 //CBlockのコンストラク
 CActiveBlock::CActiveBlock(): input(0), font(0), data(0), field(0), score(0), nextBlock(){
@@ -16,11 +16,8 @@ CActiveBlock::CActiveBlock(): input(0), font(0), data(0), field(0), score(0), ne
 	input = CInput::GetInstance();
 	font = CFontHandle::GetInstance();
 	data = CDataLoader::GetInstance();
-	field = CField::GetInstance();
 	score = CScore::GetInstance();
-	
-	
-	
+	field = CField::GetInstance();	
 }
 
 //CBlockのインスタンスのポインタを返す関数

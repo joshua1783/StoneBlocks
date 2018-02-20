@@ -11,9 +11,9 @@
 
 using namespace std;
 
-class CScore;
 class CInput;
 class CDataLoader;
+class CScore;
 
 class CField
 {
@@ -28,9 +28,9 @@ public:
 	int GetVanishBlock(int, int);
 	void Active2FieldBlock(int, int, short);
 private:
-	CScore * score;
 	CInput * input;
 	CDataLoader * data;
+	CScore * score;
 	bool flag_Grid;	//グリッド線の描画フラグ
 	int count;
 	int chain;

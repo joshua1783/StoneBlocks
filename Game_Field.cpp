@@ -10,9 +10,9 @@
 CField::CField() :vanishBlocks(), score(0), input(0), data(0), newLineBlocks(FIELD_WIDTH, -1) {
 
 	//インスタンス取得
-	score = CScore::GetInstance();
 	input = CInput::GetInstance();
 	data  = CDataLoader::GetInstance();
+	score = CScore::GetInstance();
 	//フィールドブロック用のメモリをあらかじめ確保
 	fieldBlocks.reserve(VECTOR_CAPACITY_NUM);
 }

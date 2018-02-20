@@ -1,9 +1,9 @@
 #include <DxLib.h>
 #include "Common.h"
-#include "Game_Pause.h"
 #include "Sys_Input.h"
 #include "Sys_Font.h"
 #include "Sys_DataLoader.h"
+#include "Game_Pause.h"
 
 //CPauseのコンストラク
 CPause::CPause(): input(0), font(0), data(0){

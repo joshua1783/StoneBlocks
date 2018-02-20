@@ -1,7 +1,7 @@
 #include <DxLib.h>
 #include "Common.h"
-#include "Game_Score.h"
 #include "Sys_Font.h"
+#include "Game_Score.h"
 
 //CScoreのコンストラク
 CScore::CScore():font(0){

@@ -1,15 +1,15 @@
 #include <DxLib.h>
 #include "Common.h"
 #include "Sys_DataLoader.h"
-#include "Game_Field.h"
 #include "Game_Effect.h"
+#include "Game_Field.h"
 
 //CEffectnodのコンストラクタ
 CEffect::CEffect() : field(0), data(0), count(0), num(0) {
 
 	//インスタンス取得
+	data = CDataLoader::GetInstance();
 	field = CField::GetInstance();
-	data  = CDataLoader::GetInstance();
 }
 
 //CEffectnodのインスタンスのポインタを返す関数

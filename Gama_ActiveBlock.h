@@ -13,8 +13,8 @@ using namespace std;
 class CInput;
 class CFontHandle;
 class CDataLoader;
-class CField;
 class CScore;
+class CField;
 
 struct Pos{
 	int x;
@@ -34,8 +34,8 @@ private:
 	CInput * input;
 	CFontHandle* font;
 	CDataLoader * data;
-	CField* field;
 	CScore* score;
+	CField* field;
 	int nextBlock[ACTIVEBLOCK_HEIGHT][ACTIVEBLOCK_WIDTH];
 	vector<vector<short>> activeBlock;
 	Pos pos;

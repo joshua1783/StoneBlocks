@@ -1,26 +1,26 @@
 #include <DxLib.h>
 #include "Common.h"
 #include "SceneBase.h"
+#include "Sys_Font.h"
+#include "Sys_DataLoader.h"
 #include "Game_Main.h"
-#include "Game_Field.h"
-#include "Gama_ActiveBlock.h"
 #include "Game_Effect.h"
 #include "Game_Pause.h"
 #include "Game_Score.h"
-#include "Sys_Font.h"
-#include "Sys_DataLoader.h"
+#include "Game_Field.h"
+#include "Gama_ActiveBlock.h"
 
 //CGameのコンストラクタ
 CGame::CGame(): field(0), block(0), effect(0), pause(0), score(0), data(0), timeNow(0), timeOld(GetNowCount()){
 
 	//インスタンス取得
-	field = CField::GetInstance();
-	block = CActiveBlock::GetInstance();
+	font = CFontHandle::GetInstance();
+	data = CDataLoader::GetInstance();
 	effect = CEffect::GetInstance();
 	pause = CPause::GetInstance();
 	score = CScore::GetInstance();
-	font = CFontHandle::GetInstance();
-	data  = CDataLoader::GetInstance();
+	field = CField::GetInstance();
+	block = CActiveBlock::GetInstance();
 
 	//ステータス初期化
 	status = GS_SetUp;
@@ -30,9 +30,9 @@ CGame::CGame(): field(0), block(0), effect(0), pause(0), score(0), data(0), time
 CGame::~CGame(){
 	delete block;
 	delete field;
-	delete effect;
-	delete pause;
 	delete score;
+	delete pause;
+	delete effect;
 }
 
 //ゲームシーンの状態推移関数

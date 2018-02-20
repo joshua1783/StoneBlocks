@@ -1,13 +1,13 @@
 #ifndef GAME_MAIN_H
 #define GAME_MAIN_H
 
-class CField;
-class CActiveBlock;
+class CFontHandle;
+class CDataLoader;
 class CEffect;
 class CPause;
 class CScore;
-class CFontHandle;
-class CDataLoader;
+class CField;
+class CActiveBlock;
 
 //ゲームシーン全体を管理するクラス
 class CGame : public CSceneBase
@@ -19,13 +19,13 @@ public:
 	void Draw(CSceneMgr* sceneMgr);
 	int GetTimeNow();
 private:
-	CField * field;
-	CActiveBlock* block;
+	CFontHandle * font;
+	CDataLoader * data;
 	CEffect* effect;
 	CPause* pause;
 	CScore* score;
-	CFontHandle* font;
-	CDataLoader * data;
+	CField * field;
+	CActiveBlock* block;
 	int status;
 	int timeNow;
 	int timeOld;

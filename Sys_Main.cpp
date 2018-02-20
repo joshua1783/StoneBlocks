@@ -22,6 +22,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//インスタンス取得
 	CInput* input = CInput::GetInstance();
 	CSceneMgr* scene = CSceneMgr::GetInstance();
+	CFontHandle* font = CFontHandle::GetInstance();
 	CDataLoader* data = CDataLoader::GetInstance();
 	
 	//素材読み込み
@@ -44,6 +45,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//メモリー開放
 	delete input;
 	delete scene;
+	delete font;
 	delete data;
 	
 	//Dxライブラリ終了処理
