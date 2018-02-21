@@ -10,6 +10,8 @@
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
+	SetOutApplicationLogValidFlag(FALSE);
+
 	//Dxライブラリ初期化,ウィンドウモード設定,裏画面描画設定
 	if (DxLib_Init() == -1 ||
 		ChangeWindowMode(TRUE) != DX_CHANGESCREEN_OK ||

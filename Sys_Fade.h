@@ -1,7 +1,7 @@
 #ifndef SYS_FADE_H
 #define SYS_FADE_H
 
-#define SPEED 0.005;
+#define SPEED 0.008;
 
 class CFade
 {
@@ -15,7 +15,7 @@ public:
 	void FadeOut();
 	bool CheckFade();
 private:
-	float rate;
+	double rate;
 	bool flag_Fade;
 	bool flag_FadeType;
 	bool ParamChange(float);
