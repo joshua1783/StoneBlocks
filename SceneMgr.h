@@ -10,7 +10,7 @@ public:
 	CSceneMgr();
 	~CSceneMgr();
 	static CSceneMgr* GetInstance();
-	void SceneUpdata();
+	void SceneUpdata(int);
 	void SceneDraw();
 private:
 	CSceneBase* sceneNow;	//åªç›ÇÃÉVÅ[Éì

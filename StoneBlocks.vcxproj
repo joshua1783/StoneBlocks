@@ -138,6 +138,7 @@
     <ClCompile Include="Gama_ActiveBlock.cpp" />
     <ClCompile Include="Game_Effect.cpp" />
     <ClCompile Include="Game_Field.cpp" />
+    <ClCompile Include="Game_GameOver.cpp" />
     <ClCompile Include="Game_Main.cpp" />
     <ClCompile Include="Game_Pause.cpp" />
     <ClCompile Include="Game_Score.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="Gama_ActiveBlock.h" />
     <ClInclude Include="Game_Effect.h" />
     <ClInclude Include="Game_Field.h" />
+    <ClInclude Include="Game_GameOver.h" />
     <ClInclude Include="Game_Main.h" />
     <ClInclude Include="Game_Pause.h" />
     <ClInclude Include="Game_Score.h" />

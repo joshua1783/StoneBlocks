@@ -22,6 +22,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetMainWindowText("StoneBlocks");
 	SetGraphMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32);
 
+	//遷移時間計測用変数
+	int time, timeNow;
+	int timeOld = GetNowCount();
+
 	//インスタンス取得
 	CInput* input = CInput::GetInstance();
 	CFade* fade = CFade::GetInstance();
@@ -38,12 +42,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		   input->GetKeyAll() == 0 &&
 		   input->CheckKey(KEY_INPUT_ESCAPE) == 0){
 
-		scene->SceneUpdata();
+		//現在時間を取得し,1フレームでの遷移時間を取得
+		time = GetNowCount();
+		timeNow = time - timeOld;
+		timeOld = time;
+
+		//状態推移関数
+		scene->SceneUpdata(timeNow);
 		fade->UpData();
 
 		//ブレンドモードなしに設定
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 		
+		//描画関数
 		scene->SceneDraw();
 		fade->Draw();
 
@@ -53,6 +64,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	//メモリー開放
 	delete input;
+	delete fade;
 	delete scene;
 	delete font;
 	delete data;

@@ -64,6 +64,7 @@ void CDataLoader::Load() {
 		//Œø‰Ê‰¹
 		SoundLoad(se_Break, 80, "se/Break.wav");
 		SoundLoad(se_Move, 50, "se/Move.wav");
+		SoundLoad(se_Change, 50, "se/Change.wav");
 		SoundLoad(se_Bgm, 60, "se/BGM.wav");
 		SoundLoad(se_Select, 60, "se/Select.wav");
 		SoundLoad(se_Enter, 60, "se/Enter.wav");
@@ -127,6 +128,9 @@ int CDataLoader::GetSe_Break() const {
 }
 int CDataLoader::GetSe_Move() const {
 	return se_Move;
+}
+int CDataLoader::GetSe_Change() const {
+	return se_Change;
 }
 int CDataLoader::GetSe_Bgm() const {
 	return se_Bgm;

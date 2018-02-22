@@ -18,7 +18,7 @@ class CTitle: public CSceneBase
 public:
 	CTitle();
 	~CTitle(){};
-	CSceneBase* Updata(CSceneMgr* sceneMgr);
+	CSceneBase* Updata(CSceneMgr* sceneMgr, int timeNow);
 	void Draw(CSceneMgr* sceneMgr);
 private:
 	CInput * input;

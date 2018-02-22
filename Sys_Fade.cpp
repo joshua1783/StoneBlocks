@@ -44,16 +44,16 @@ bool CFade::CheckFade() {
 	return flag_Fade;
 }
 
-bool CFade::ParamChange(float target) {
+bool CFade::ParamChange(double target) {
 
 	if (rate < target) {
-		rate += SPEED;
+		rate += FADE_SPEED;
 		if (rate >= target) {
 			rate = target;
 			return true;
 		}
 	}else if (rate > target) {
-		rate -= SPEED;
+		rate -= FADE_SPEED;
 		if (rate <= target) {
 			rate = target;
 			return true;

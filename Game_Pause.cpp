@@ -89,16 +89,16 @@ int CPause::PauseNow() {
 	//Enterキーが押されたら選択しているメニューによって処理分岐
 	if (input->CheckKey(KEY_INPUT_RETURN) == 1 || input->CheckKey(KEY_INPUT_NUMPADENTER == 1)) {
 		PlaySoundMem(data->GetSe_Enter(), DX_PLAYTYPE_BACK);
-		//「ゲームに戻る」存していた状態に戻る
+		//「ゲームに戻る」ならば保存していた状態に戻る
 		if (selectNow == PM_ReturnGame) {
 			SetDrawBright(255, 255, 255);
 			return saveStatus;
 		}
-		//「タイトルに戻る」ならばタイトル状態に移行
+		//「タイトルに戻る」ならばフェードアウト状態に移行
 		else if (selectNow == PM_ReturnTitle) {
 			StopSoundMem(data->GetSe_Bgm());
 			fade->FadeOut();
-			return GS_ReturnTitle;
+			return GS_FadeOut;
 		}
 	}
 

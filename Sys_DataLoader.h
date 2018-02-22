@@ -19,7 +19,7 @@
 	LoadParcent();\
 }
 
-#define MATERIAL_NUM 17.0	//ëfçﬁëçêî
+#define MATERIAL_NUM 18.0	//ëfçﬁëçêî
 
 class CSystem;
 class CSceneMgr;
@@ -46,6 +46,7 @@ public:
 	int GetImg_GameOver() const;
 	int GetSe_Break() const;
 	int GetSe_Move() const;
+	int GetSe_Change() const;
 	int GetSe_Bgm() const;
 	int GetSe_Select() const;
 	int GetSe_Enter() const;
@@ -67,6 +68,7 @@ private:
 	int img_GameOver;
 	int se_Break;
 	int se_Move;
+	int se_Change;
 	int se_Bgm;
 	int se_Select;
 	int se_Enter;

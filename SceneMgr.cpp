@@ -26,16 +26,16 @@ CSceneMgr* CSceneMgr::GetInstance() {
 }
 
 //シーンの状態推移関数を呼び出す関数
-void CSceneMgr::SceneUpdata() {
+void CSceneMgr::SceneUpdata(int timeNow) {
 
 	//現在のシーンの状態推移関数の呼び出し(通常、返り値は同じシーン)
-	sceneNext = sceneNow->Updata(this);
+	sceneNext = sceneNow->Updata(this, timeNow);
 
 	//次のシーンが異なった場合、シーンを移動
 	if (sceneNext != sceneNow) {
 		delete sceneNow;
 		sceneNow = sceneNext;
-		sceneNext = sceneNow->Updata(this);
+		sceneNext = sceneNow->Updata(this,timeNow);
 	}
 }
 

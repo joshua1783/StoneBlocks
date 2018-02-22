@@ -35,7 +35,9 @@ enum GameStatus {
 	GS_FallBlocks,
 	GS_CheckGameOver,
 	GS_GameOver,
+	GS_Continue,
 	GS_Pause,
+	GS_FadeOut,
 	GS_ReturnTitle,
 };
 

@@ -127,8 +127,10 @@ void CActiveBlock::MoveBlock(int timeNow) {
 
 	//アクティブブロック回転
 	if (input->CheckKey(KEY_INPUT_W) == 1 || input->CheckKey(KEY_INPUT_UP) == 1) {
+		PlaySoundMem(data->GetSe_Change(), DX_PLAYTYPE_BACK);
 		ChangeBlock();
 	}
+
 	//x座標移動入力
 	if ((input->CheckKey(KEY_INPUT_A) % 8) == 1 || (input->CheckKey(KEY_INPUT_LEFT) % 8) == 1) {
 		PlaySoundMem(data->GetSe_Move(), DX_PLAYTYPE_BACK);
@@ -137,6 +139,7 @@ void CActiveBlock::MoveBlock(int timeNow) {
 		PlaySoundMem(data->GetSe_Move(), DX_PLAYTYPE_BACK);
 		movePos.x = 1;
 	}
+
 	//y座標移動入力
 	if ((input->CheckKey(KEY_INPUT_S) % 8) == 1 || (input->CheckKey(KEY_INPUT_DOWN) % 8) == 1) {
 		movePos.y = 1;
@@ -144,7 +147,9 @@ void CActiveBlock::MoveBlock(int timeNow) {
 		flag_BlockStop = true;
 		//スコア加算
 		score->ScoreAdd_Move();
-	}else if (downTime >= DOWN_TIME_NUM) {
+	}
+	//自動落下
+	else if (downTime >= DOWN_TIME_NUM) {
 		movePos.y = 1;
 		downTime = 0;
 	}
@@ -173,6 +178,7 @@ void CActiveBlock::MakeNewBlock() {
 	//位置を初期化
 	pos.x = FIELD_WIDTH / 2;
 	pos.y = -1;
+
 	//次のブロックだったものをアクティブブロックに代入
 	for (int i = 0; i < ACTIVEBLOCK_HEIGHT; i++) {
 		for (int j = 0; j < ACTIVEBLOCK_WIDTH; j++) {
@@ -211,11 +217,11 @@ bool CActiveBlock::CheckHitBlock_Y() {
 	if (pos.y == FIELD_HEIGHT - ACTIVEBLOCK_HEIGHT) {
 		return true;
 	}
-
 	//アクティブブロックがフィールドブロックと衝突していればtrue
 	if (field->GetFieldBlockType(pos.x, pos.y + ACTIVEBLOCK_HEIGHT) != -1) {
 		return true;
 	}
+
 	//ここまでくると移動先に障害物なし(移動可)
 	waitTime = 0;
 	flag_BlockStop = false;
